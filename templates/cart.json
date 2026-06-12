@@ -10,7 +10,7 @@
           "type": "icon",
           "settings": {
             "icon": "<svg width=\"32\" height=\"32\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--color-accent)\" stroke-width=\"1\"><rect x=\"1\" y=\"3\" width=\"15\" height=\"13\"></rect><polygon points=\"16 8 20 8 23 11 23 16 16 16 16 8\"></polygon><circle cx=\"5.5\" cy=\"18.5\" r=\"2.5\"></circle><circle cx=\"18.5\" cy=\"18.5\" r=\"2.5\"></circle></svg>",
-            "title": "FREE SHIPPING",
+            "heading": "FREE SHIPPING",
             "text": "Free standard shipping on all orders over $200."
           }
         },
@@ -18,7 +18,7 @@
           "type": "icon",
           "settings": {
             "icon": "<svg width=\"32\" height=\"32\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--color-accent)\" stroke-width=\"1\"><path d=\"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8\"></path><polyline points=\"3 3 3 8 8 8\"></polyline></svg>",
-            "title": "EASY RETURNS",
+            "heading": "EASY RETURNS",
             "text": "Not satisfied? We offer 30-day returns."
           }
         },
@@ -26,7 +26,7 @@
           "type": "icon",
           "settings": {
             "icon": "<svg width=\"32\" height=\"32\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--color-accent)\" stroke-width=\"1\"><rect x=\"3\" y=\"11\" width=\"18\" height=\"11\" rx=\"2\" ry=\"2\"></rect><path d=\"M7 11V7a5 5 0 0 1 10 0v4\"></path></svg>",
-            "title": "SECURE PAYMENTS",
+            "heading": "SECURE PAYMENTS",
             "text": "Your payment information is always protected."
           }
         },
@@ -34,7 +34,7 @@
           "type": "icon",
           "settings": {
             "icon": "<svg width=\"32\" height=\"32\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--color-accent)\" stroke-width=\"1\"><path d=\"M2 12a10 10 0 0 1 20 0v4a2 2 0 0 1-2 2h-2v-6h4\"></path><path d=\"M2 16h2v6H2z\"></path><path d=\"M12 21v-4\"></path></svg>",
-            "title": "CUSTOMER SUPPORT",
+            "heading": "CUSTOMER SUPPORT",
             "text": "We're here to help 24/7 via email."
           }
         }
