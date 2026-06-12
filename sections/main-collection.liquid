@@ -79,6 +79,22 @@
     <!-- Right Content: Grid -->
     <div class="collection-content" style="flex: 1; min-width: 0;">
       
+      <!-- Category Tabs -->
+      <div class="collection-tabs" style="display: flex; gap: 2rem; margin-bottom: 2.5rem; border-bottom: 1px solid #E5E0D8; padding-bottom: 1rem; overflow-x: auto; white-space: nowrap;">
+        <a href="/collections/all" class="collection-tab" style="text-decoration: none; color: {% if collection.handle == 'all' %}var(--color-text){% else %}#999{% endif %}; font-family: var(--font-heading-family); font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: {% if collection.handle == 'all' %}600{% else %}400{% endif %}; position: relative;">
+          ALL
+          {% if collection.handle == 'all' %}<span style="position: absolute; bottom: -17px; left: 0; width: 100%; height: 2px; background: var(--color-text);"></span>{% endif %}
+        </a>
+        <a href="/collections/men" class="collection-tab" style="text-decoration: none; color: {% if collection.handle == 'men' %}var(--color-text){% else %}#999{% endif %}; font-family: var(--font-heading-family); font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: {% if collection.handle == 'men' %}600{% else %}400{% endif %}; position: relative;">
+          MEN
+          {% if collection.handle == 'men' %}<span style="position: absolute; bottom: -17px; left: 0; width: 100%; height: 2px; background: var(--color-text);"></span>{% endif %}
+        </a>
+        <a href="/collections/women" class="collection-tab" style="text-decoration: none; color: {% if collection.handle == 'women' %}var(--color-text){% else %}#999{% endif %}; font-family: var(--font-heading-family); font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: {% if collection.handle == 'women' %}600{% else %}400{% endif %}; position: relative;">
+          WOMEN
+          {% if collection.handle == 'women' %}<span style="position: absolute; bottom: -17px; left: 0; width: 100%; height: 2px; background: var(--color-text);"></span>{% endif %}
+        </a>
+      </div>
+      
       <!-- Toolbar -->
       <div class="collection-toolbar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;">
         <div style="font-size: 0.75rem; letter-spacing: 0.1em; color: #666; text-transform: uppercase; font-weight: 600;">
