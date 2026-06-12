@@ -37,7 +37,10 @@
             {% when 'buy_buttons' %}
               <div class="product-page__form-wrapper" {{ block.shopify_attributes }}>
                 <form method="post" action="{{ routes.cart_add_url }}" id="product-form-{{ section.id }}" class="product-form">
-                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="VariantId-{{ section.id }}">
+                  <script type="application/json" id="ProductVariants-{{ section.id }}">
+                    {{ product.variants | json }}
+                  </script>
                   
                   {% unless product.has_only_default_variant %}
                     <div class="product-form__variants">
@@ -89,6 +92,51 @@
                   </div>
                 </form>
               </div>
+
+              <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                  // Quantity Logic
+                  const qtyMinus = document.querySelector('.quantity-input__btn--minus');
+                  const qtyPlus = document.querySelector('.quantity-input__btn--plus');
+                  const qtyInput = document.querySelector('.quantity-input__field');
+
+                  if (qtyMinus && qtyPlus && qtyInput) {
+                    qtyMinus.addEventListener('click', function() {
+                      let val = parseInt(qtyInput.value, 10) || 1;
+                      if (val > 1) qtyInput.value = val - 1;
+                    });
+                    qtyPlus.addEventListener('click', function() {
+                      let val = parseInt(qtyInput.value, 10) || 1;
+                      qtyInput.value = val + 1;
+                    });
+                  }
+
+                  // Variant Logic
+                  const radios = document.querySelectorAll('input[type="radio"][name^="options"]');
+                  const variantInput = document.getElementById('VariantId-{{ section.id }}');
+                  const variantsJson = document.getElementById('ProductVariants-{{ section.id }}');
+                  
+                  if (radios.length > 0 && variantInput && variantsJson) {
+                    const variants = JSON.parse(variantsJson.textContent);
+                    radios.forEach(radio => {
+                      radio.addEventListener('change', function() {
+                        const selectedOptions = Array.from(document.querySelectorAll('input[type="radio"][name^="options"]:checked')).map(r => r.value);
+                        
+                        const matchedVariant = variants.find(v => {
+                          return v.options.every((opt, index) => opt === selectedOptions[index]);
+                        });
+                        
+                        if (matchedVariant) {
+                          variantInput.value = matchedVariant.id;
+                          const url = new URL(window.location.href);
+                          url.searchParams.set('variant', matchedVariant.id);
+                          window.history.replaceState({}, '', url.toString());
+                        }
+                      });
+                    });
+                  }
+                });
+              </script>
             {% when 'custom_liquid' %}
               <div class="product-page__custom-liquid" {{ block.shopify_attributes }}>
                 {{ block.settings.custom_liquid }}
