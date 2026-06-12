@@ -5,6 +5,24 @@
       <p style="color: #666; line-height: 1.8; max-width: 600px; margin: 0 auto;">Shop our exclusive discounted items before they are gone forever. High quality, lower prices.</p>
     </div>
 
+    <style>
+      .grid-4-special {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+      }
+      @media screen and (max-width: 990px) {
+        .grid-4-special {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media screen and (max-width: 750px) {
+        .grid-4-special {
+          grid-template-columns: repeat(1, 1fr);
+        }
+      }
+    </style>
+
     <div class="grid-4-special">
       {% assign sale_items_found = false %}
       {% for product in collections.all.products %}

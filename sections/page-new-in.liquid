@@ -5,6 +5,24 @@
       <p style="color: #666; line-height: 1.8; max-width: 600px; margin: 0 auto;">Discover our latest pieces. Fresh styles added weekly to keep your wardrobe updated with timeless, modern fashion.</p>
     </div>
 
+    <style>
+      .grid-4-special {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+      }
+      @media screen and (max-width: 990px) {
+        .grid-4-special {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media screen and (max-width: 750px) {
+        .grid-4-special {
+          grid-template-columns: repeat(1, 1fr);
+        }
+      }
+    </style>
+
     <div class="grid-4-special">
       {% assign count = 0 %}
       {% if collections.all.products.size > 0 %}
