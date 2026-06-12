@@ -1,16 +1,37 @@
+<style>
+  .logo-list { overflow: hidden; padding: 4rem 0; background: var(--color-bg); }
+  .logo-list__heading { text-align: center; font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 3rem; text-transform: uppercase; }
+  .logo-list__marquee { display: flex; width: max-content; animation: logoMarquee 15s linear infinite; }
+  .logo-list__marquee:hover { animation-play-state: paused; }
+  @keyframes logoMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .logo-list__item { width: 250px; flex-shrink: 0; padding: 0 2rem; display: flex; align-items: center; justify-content: center; }
+  .logo-list__image { max-width: 100%; height: auto; max-height: 50px; object-fit: contain; filter: grayscale(100%); transition: filter 0.3s ease; }
+  .logo-list__item:hover .logo-list__image { filter: grayscale(0%); }
+</style>
+
 <div class="logo-list">
   {% if section.settings.heading != blank %}
     <h2 class="logo-list__heading">{{ section.settings.heading | escape }}</h2>
   {% endif %}
-  <div class="logo-list__container">
-    {% for block in section.blocks %}
-      <div class="logo-list__item" {{ block.shopify_attributes }}>
-        {% if block.settings.image != blank %}
-          {{ block.settings.image | image_url: width: 400 | image_tag: loading: 'lazy', class: 'logo-list__image' }}
-        {% else %}
-          {{ 'logo' | placeholder_svg_tag: 'logo-list__image placeholder-svg' }}
-        {% endif %}
-      </div>
+  <div class="logo-list__marquee">
+    {% for i in (1..2) %}
+      {% for block in section.blocks %}
+        <div class="logo-list__item" {{ block.shopify_attributes }}>
+          {% if block.settings.image != blank %}
+            {{ block.settings.image | image_url: width: 400 | image_tag: loading: 'lazy', class: 'logo-list__image' }}
+          {% else %}
+            {% assign mod_index = forloop.index | modulo: 6 %}
+            <h3 style="font-family: var(--font-heading-family); font-size: 1.5rem; margin: 0; color: var(--color-text); letter-spacing: 0.1em; font-weight: 600; text-transform: uppercase;">
+              {% if mod_index == 1 %}ZARA
+              {% elsif mod_index == 2 %}GUCCI
+              {% elsif mod_index == 3 %}PRADA
+              {% elsif mod_index == 4 %}SAINT LAURENT
+              {% elsif mod_index == 5 %}BURBERRY
+              {% else %}BOSS{% endif %}
+            </h3>
+          {% endif %}
+        </div>
+      {% endfor %}
     {% endfor %}
   </div>
 </div>
