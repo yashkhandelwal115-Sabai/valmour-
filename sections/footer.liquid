@@ -43,10 +43,16 @@
     <div class="footer__newsletter">
       <h4 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600; margin-bottom: 1rem;">NEWSLETTER</h4>
       <p style="font-size: 0.75rem; color: #A0A0A0; line-height: 1.6; margin-bottom: 1.5rem;">Be the first to know about new arrivals and exclusive offers.</p>
-      <form action="#" method="post" style="display: flex;">
-        <input type="email" placeholder="Enter your email" style="background: transparent; border: 1px solid #333; color: #FFF; padding: 0.75rem 1rem; width: 100%; font-size: 0.75rem;">
-        <button type="submit" style="background: var(--color-accent); color: #FFF; border: none; padding: 0 1.5rem; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; white-space: nowrap;">Subscribe</button>
-      </form>
+      {% form 'customer', id: 'FooterNewsletterForm', style: 'display: flex; flex-direction: column; gap: 0.5rem;' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div style="display: flex;">
+          <input type="email" name="contact[email]" placeholder="Enter your email" required style="background: transparent; border: 1px solid #333; color: #FFF; padding: 0.75rem 1rem; width: 100%; font-size: 0.75rem;">
+          <button type="submit" style="background: var(--color-accent); color: #FFF; border: none; padding: 0 1.5rem; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; white-space: nowrap;">Subscribe</button>
+        </div>
+        {%- if form.posted_successfully? -%}
+          <p style="color: #4CAF50; font-size: 0.75rem; margin: 0;">Thanks for subscribing!</p>
+        {%- endif -%}
+      {% endform %}
     </div>
 
   </div>
