@@ -2,13 +2,6 @@
   "name": "Header group",
   "type": "header",
   "sections": {
-    "announcement": {
-      "type": "announcement-bar",
-      "settings": {
-        "text": "FREE SHIPPING WORLDWIDE ON ORDERS OVER $200",
-        "link": ""
-      }
-    },
     "header": {
       "type": "header",
       "settings": {
