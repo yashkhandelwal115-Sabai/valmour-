@@ -8,8 +8,10 @@ predictive-search {
   display: none;
   position: absolute;
   top: calc(100% + 0.1rem);
-  left: 0;
+  right: 0;
+  left: auto;
   width: 100%;
+  min-width: 350px;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -69,11 +71,16 @@ predictive-search[open] .predictive-search {
 .predictive-search__item-content {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-width: 0;
 }
 
 .predictive-search__item-heading {
   font-size: 0.9rem;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .predictive-search__item-price {
