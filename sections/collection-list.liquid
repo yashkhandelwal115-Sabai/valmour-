@@ -35,7 +35,7 @@
         <div class="collection-list__item">
           <a href="{{ block.settings.collection.url | default: '#' }}" class="collection-card" style="position: relative; display: block; overflow: hidden; aspect-ratio: 4/5;" {{ block.shopify_attributes }}>
             {% if block.settings.image != blank %}
-              {{ block.settings.image | image_url: width: 800 | image_tag: style: 'width: 100%; height: 100%; object-fit: cover; transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);' }}
+              {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400, 600, 800', sizes: '(max-width: 768px) 65vw, 25vw', style: 'width: 100%; height: 100%; object-fit: cover; transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);' }}
             {% else %}
               {% assign fallback_img = 'https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=800&auto=format&fit=crop' %}
               {% if block.settings.title == 'WOMEN' or block.settings.title == 'Women' %}
@@ -45,7 +45,7 @@
               {% elsif block.settings.title == 'THE COLLECTION' or block.settings.title == 'The Collection' %}
                 {% assign fallback_img = 'https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800&auto=format&fit=crop' %}
               {% endif %}
-              <img src="{{ fallback_img }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);" alt="{{ block.settings.title }}">
+              <img src="{{ fallback_img }}" srcset="{{ fallback_img | replace: 'w=800', 'w=400' }} 400w, {{ fallback_img | replace: 'w=800', 'w=600' }} 600w, {{ fallback_img }} 800w" sizes="(max-width: 768px) 65vw, 25vw" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);" alt="{{ block.settings.title }}">
             {% endif %}
             <div class="collection-card__overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.25); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #FFF; transition: background 0.4s ease;">
               <h3 style="font-family: var(--font-heading-family); font-size: 1.75rem; letter-spacing: 0.15em; margin-bottom: 0.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">{{ block.settings.title }}</h3>

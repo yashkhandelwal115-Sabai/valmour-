@@ -51,6 +51,7 @@
       }
     {% endstyle %}
 
+    <link rel="preload" as="style" href="{{ 'velour.css' | asset_url }}">
     {{ 'velour.css' | asset_url | stylesheet_tag }}
 
     {{ content_for_header }}
