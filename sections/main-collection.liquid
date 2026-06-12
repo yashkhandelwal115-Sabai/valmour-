@@ -81,18 +81,18 @@
       
       <!-- Category Tabs -->
       <div class="collection-tabs" style="display: flex; gap: 2rem; margin-bottom: 2.5rem; border-bottom: 1px solid #E5E0D8; padding-bottom: 1rem; overflow-x: auto; white-space: nowrap;">
-        <a href="/collections/all" class="collection-tab" style="text-decoration: none; color: {% if collection.handle == 'all' %}var(--color-text){% else %}#999{% endif %}; font-family: var(--font-heading-family); font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: {% if collection.handle == 'all' %}600{% else %}400{% endif %}; position: relative;">
+        <button data-filter="all" class="collection-tab active" style="background: none; border: none; cursor: pointer; color: var(--color-text); font-family: var(--font-heading-family); font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; position: relative; padding: 0;">
           ALL
-          {% if collection.handle == 'all' %}<span style="position: absolute; bottom: -17px; left: 0; width: 100%; height: 2px; background: var(--color-text);"></span>{% endif %}
-        </a>
-        <a href="/collections/men" class="collection-tab" style="text-decoration: none; color: {% if collection.handle == 'men' %}var(--color-text){% else %}#999{% endif %}; font-family: var(--font-heading-family); font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: {% if collection.handle == 'men' %}600{% else %}400{% endif %}; position: relative;">
+          <span class="tab-indicator" style="position: absolute; bottom: -17px; left: 0; width: 100%; height: 2px; background: var(--color-text);"></span>
+        </button>
+        <button data-filter="men" class="collection-tab" style="background: none; border: none; cursor: pointer; color: #999; font-family: var(--font-heading-family); font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 400; position: relative; padding: 0;">
           MEN
-          {% if collection.handle == 'men' %}<span style="position: absolute; bottom: -17px; left: 0; width: 100%; height: 2px; background: var(--color-text);"></span>{% endif %}
-        </a>
-        <a href="/collections/women" class="collection-tab" style="text-decoration: none; color: {% if collection.handle == 'women' %}var(--color-text){% else %}#999{% endif %}; font-family: var(--font-heading-family); font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: {% if collection.handle == 'women' %}600{% else %}400{% endif %}; position: relative;">
+          <span class="tab-indicator" style="position: absolute; bottom: -17px; left: 0; width: 100%; height: 2px; background: var(--color-text); display: none;"></span>
+        </button>
+        <button data-filter="women" class="collection-tab" style="background: none; border: none; cursor: pointer; color: #999; font-family: var(--font-heading-family); font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 400; position: relative; padding: 0;">
           WOMEN
-          {% if collection.handle == 'women' %}<span style="position: absolute; bottom: -17px; left: 0; width: 100%; height: 2px; background: var(--color-text);"></span>{% endif %}
-        </a>
+          <span class="tab-indicator" style="position: absolute; bottom: -17px; left: 0; width: 100%; height: 2px; background: var(--color-text); display: none;"></span>
+        </button>
       </div>
       
       <!-- Toolbar -->
@@ -163,14 +163,14 @@
               </div>
             {% else %}
               <!-- DUMMY DATA FOR DEMO PURPOSES -->
-              {% render 'product-card', fallback_index: 1 %}
-              {% render 'product-card', fallback_index: 2 %}
-              {% render 'product-card', fallback_index: 3 %}
-              {% render 'product-card', fallback_index: 4 %}
-              {% render 'product-card', fallback_index: 5 %}
-              {% render 'product-card', fallback_index: 6 %}
-              {% render 'product-card', fallback_index: 7 %}
-              {% render 'product-card', fallback_index: 8 %}
+              <div class="demo-product" data-category="men">{% render 'product-card', fallback_index: 1 %}</div>
+              <div class="demo-product" data-category="men">{% render 'product-card', fallback_index: 2 %}</div>
+              <div class="demo-product" data-category="women">{% render 'product-card', fallback_index: 3 %}</div>
+              <div class="demo-product" data-category="men">{% render 'product-card', fallback_index: 4 %}</div>
+              <div class="demo-product" data-category="women">{% render 'product-card', fallback_index: 5 %}</div>
+              <div class="demo-product" data-category="women">{% render 'product-card', fallback_index: 6 %}</div>
+              <div class="demo-product" data-category="women">{% render 'product-card', fallback_index: 7 %}</div>
+              <div class="demo-product" data-category="men">{% render 'product-card', fallback_index: 8 %}</div>
             {% endif %}
           {% endif %}
         </div>
@@ -187,6 +187,48 @@
     
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.collection-tab');
+    const products = document.querySelectorAll('.demo-product');
+    
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        const filter = this.getAttribute('data-filter');
+        
+        // Update tabs styling
+        tabs.forEach(t => {
+          t.classList.remove('active');
+          t.style.fontWeight = '400';
+          t.style.color = '#999';
+          t.querySelector('.tab-indicator').style.display = 'none';
+        });
+        
+        this.classList.add('active');
+        this.style.fontWeight = '600';
+        this.style.color = 'var(--color-text)';
+        this.querySelector('.tab-indicator').style.display = 'block';
+        
+        // Filter products
+        if (products.length > 0) {
+          products.forEach(product => {
+            if (filter === 'all' || product.getAttribute('data-category') === filter) {
+              product.style.display = 'block';
+            } else {
+              product.style.display = 'none';
+            }
+          });
+        } else {
+          // If using real products, handle tag filtering via URL (not needed for this demo)
+          if(filter !== 'all') {
+             // Optional real filtering logic could go here
+          }
+        }
+      });
+    });
+  });
+</script>
 
 {% schema %}
 {
