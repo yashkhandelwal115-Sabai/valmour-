@@ -73,6 +73,9 @@
           </div>
         {%- endfor -%}
         <input type="hidden" name="sort_by" id="SortByHidden" value="{{ collection.sort_by | default: collection.default_sort_by }}">
+        <button type="submit" class="button" style="width: 100%; margin-top: 1rem; background-color: var(--color-accent); color: #fff; border: none; padding: 1rem; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;">
+          Apply Filters
+        </button>
       </form>
     </aside>
     
