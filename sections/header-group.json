@@ -6,7 +6,7 @@
       "type": "header",
       "settings": {
         "enable_sticky": true,
-        "transparent_on_home": true
+        "transparent_on_home": false
       }
     }
   },
