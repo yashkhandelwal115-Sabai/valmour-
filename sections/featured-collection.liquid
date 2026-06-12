@@ -14,6 +14,12 @@
           {% render 'product-card', product: product %}
         </div>
       {% endfor %}
+    {% elsif collections.all.products.size > 0 %}
+      {% for product in collections.all.products limit: section.settings.products_to_show %}
+        <div class="featured-collection__item">
+          {% render 'product-card', product: product %}
+        </div>
+      {% endfor %}
     {% else %}
       {% for i in (1..section.settings.products_to_show) %}
         <div class="featured-collection__item">

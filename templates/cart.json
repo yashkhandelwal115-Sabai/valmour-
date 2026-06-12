@@ -49,7 +49,7 @@
     "cross_sells": {
       "type": "featured-collection",
       "settings": {
-        "title": "YOU MAY ALSO LIKE",
+        "heading": "YOU MAY ALSO LIKE",
         "products_to_show": 4
       }
     },
