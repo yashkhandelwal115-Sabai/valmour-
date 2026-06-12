@@ -96,13 +96,13 @@
     "settings": [
       {
         "type": "font_picker",
-        "id": "font_heading",
+        "id": "heading_font",
         "label": "Heading font",
         "default": "helvetica_n4"
       },
       {
         "type": "font_picker",
-        "id": "font_body",
+        "id": "body_font",
         "label": "Body font",
         "default": "helvetica_n4"
       }

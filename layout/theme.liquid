@@ -12,24 +12,24 @@
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
     {%- endif -%}
 
-    {%- unless settings.font_heading.system? and settings.font_body.system? -%}
+    {%- unless settings.heading_font.system? and settings.body_font.system? -%}
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     {%- endunless -%}
 
     {% render 'seo' %}
 
     {%- liquid
-      assign body_font_bold = settings.font_body | font_modify: 'weight', 'bold'
-      assign body_font_italic = settings.font_body | font_modify: 'style', 'italic'
+      assign body_font_bold = settings.body_font | font_modify: 'weight', 'bold'
+      assign body_font_italic = settings.body_font | font_modify: 'style', 'italic'
       assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
     %}
 
     {% style %}
-      {{ settings.font_body | font_face: font_display: 'swap' }}
+      {{ settings.body_font | font_face: font_display: 'swap' }}
       {{ body_font_bold | font_face: font_display: 'swap' }}
       {{ body_font_italic | font_face: font_display: 'swap' }}
       {{ body_font_bold_italic | font_face: font_display: 'swap' }}
-      {{ settings.font_heading | font_face: font_display: 'swap' }}
+      {{ settings.heading_font | font_face: font_display: 'swap' }}
 
       :root {
         --color-bg: {{ settings.color_bg }};
@@ -41,13 +41,13 @@
         --color-button: {{ settings.color_button }};
         --color-button-text: {{ settings.color_button_text }};
 
-        --font-body-family: {{ settings.font_body.family }}, {{ settings.font_body.fallback_families }};
-        --font-body-style: {{ settings.font_body.style }};
-        --font-body-weight: {{ settings.font_body.weight }};
+        --font-body-family: {{ settings.body_font.family }}, {{ settings.body_font.fallback_families }};
+        --font-body-style: {{ settings.body_font.style }};
+        --font-body-weight: {{ settings.body_font.weight }};
 
-        --font-heading-family: {{ settings.font_heading.family }}, {{ settings.font_heading.fallback_families }};
-        --font-heading-style: {{ settings.font_heading.style }};
-        --font-heading-weight: {{ settings.font_heading.weight }};
+        --font-heading-family: {{ settings.heading_font.family }}, {{ settings.heading_font.fallback_families }};
+        --font-heading-style: {{ settings.heading_font.style }};
+        --font-heading-weight: {{ settings.heading_font.weight }};
       }
     {% endstyle %}
 
