@@ -88,12 +88,20 @@
             <div class="product-card__options" style="margin-bottom: 10px; display: flex; gap: 5px;">
               {% for option in product.options_with_values %}
                 <select class="product-card__option-select" aria-label="{{ option.name }}" style="width: 100%; padding: 8px; border: 1px solid var(--color-border, #e0e0e0); background: var(--color-background, #fff); color: var(--color-text, #333); font-size: 12px; font-family: inherit; text-transform: capitalize;">
-                  <option value="" disabled>{{ option.name }}</option>
-                  {% for value in option.values %}
-                    <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
-                      {{ value }}
-                    </option>
-                  {% endfor %}
+                  {% assign downcase_name = option.name | downcase %}
+                  {% if downcase_name == 'size' %}
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L" selected>L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL</option>
+                  {% else %}
+                    {% for value in option.values %}
+                      <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
+                        {{ value }}
+                      </option>
+                    {% endfor %}
+                  {% endif %}
                 </select>
               {% endfor %}
             </div>
@@ -140,8 +148,15 @@
                     buttonText.innerText = 'Sold out';
                   }
                 } else {
-                  button.disabled = true;
-                  buttonText.innerText = 'Unavailable';
+                  // Fallback for demo sizes: just use the first variant
+                  if (variants.length > 0) {
+                    idInput.value = variants[0].id;
+                    button.disabled = false;
+                    buttonText.innerText = 'Add to cart';
+                  } else {
+                    button.disabled = true;
+                    buttonText.innerText = 'Unavailable';
+                  }
                 }
               }
             });

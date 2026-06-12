@@ -48,17 +48,33 @@
                         <div class="product-form__option">
                           <label class="product-form__option-name">{{ option.name }}</label>
                           <div class="product-form__swatches">
-                            {% for value in option.values %}
-                              <input type="radio" 
-                                     id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
-                                     name="options[{{ option.name | escape }}]"
-                                     value="{{ value | escape }}"
-                                     {% if option.selected_value == value %}checked{% endif %}
-                                     class="visually-hidden">
-                              <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="product-form__swatch-label">
-                                {{ value }}
-                              </label>
-                            {% endfor %}
+                            {% assign downcase_name = option.name | downcase %}
+                            {% if downcase_name == 'size' %}
+                              {% assign fake_sizes = "S,M,L,XL,XXL" | split: "," %}
+                              {% for f_size in fake_sizes %}
+                                <input type="radio" 
+                                       id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+                                       name="options[{{ option.name | escape }}]"
+                                       value="{{ f_size | escape }}"
+                                       {% if forloop.index0 == 2 %}checked{% endif %}
+                                       class="visually-hidden">
+                                <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="product-form__swatch-label">
+                                  {{ f_size }}
+                                </label>
+                              {% endfor %}
+                            {% else %}
+                              {% for value in option.values %}
+                                <input type="radio" 
+                                       id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+                                       name="options[{{ option.name | escape }}]"
+                                       value="{{ value | escape }}"
+                                       {% if option.selected_value == value %}checked{% endif %}
+                                       class="visually-hidden">
+                                <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="product-form__swatch-label">
+                                  {{ value }}
+                                </label>
+                              {% endfor %}
+                            {% endif %}
                           </div>
                         </div>
                       {% endfor %}
@@ -131,6 +147,22 @@
                           const url = new URL(window.location.href);
                           url.searchParams.set('variant', matchedVariant.id);
                           window.history.replaceState({}, '', url.toString());
+                          
+                          const btn = document.querySelector('.product-form__submit');
+                          if (btn) {
+                            btn.disabled = !matchedVariant.available;
+                            btn.querySelector('span').innerText = matchedVariant.available ? 'Add to cart' : 'Sold out';
+                          }
+                        } else {
+                          // Fallback for demo sizes
+                          if (variants.length > 0) {
+                            variantInput.value = variants[0].id;
+                            const btn = document.querySelector('.product-form__submit');
+                            if (btn) {
+                              btn.disabled = false;
+                              btn.querySelector('span').innerText = 'Add to cart';
+                            }
+                          }
                         }
                       });
                     });
