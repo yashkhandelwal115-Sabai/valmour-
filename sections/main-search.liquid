@@ -1,31 +1,54 @@
-<div class="search-page">
-  <h1>Search</h1>
-  <form action="{{ routes.search_url }}" method="get">
-    <input type="text" name="q" value="{{ search.terms | escape }}">
-    <button type="submit" class="button">Search</button>
-  </form>
+<style>
+  .grid-4-special {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  @media screen and (max-width: 990px) {
+    .grid-4-special {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media screen and (max-width: 750px) {
+    .grid-4-special {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+</style>
 
-  <div class="search-page__filters">
-    <!-- Faceted search filtering -->
+<div class="search-page" style="padding: 4rem 5%; max-width: 1440px; margin: 0 auto; min-height: 60vh;">
+  <div style="text-align: center; margin-bottom: 4rem;">
+    <h1 style="font-family: var(--font-heading-family); font-size: clamp(2rem, 4vw, 3rem); text-transform: uppercase; margin-bottom: 1rem;">
+      Search Results
+    </h1>
+    {% if search.performed %}
+      <p style="color: #666; font-size: 1.1rem;">
+        Showing {{ search.results_count }} results for "{{ search.terms | escape }}"
+      </p>
+    {% endif %}
   </div>
 
   {% if search.performed %}
     {% if search.results_count > 0 %}
-      <div class="search-page__results grid grid-3">
+      <div class="search-page__results grid-4-special">
         {% for item in search.results %}
           <div class="search-page__item">
             {% if item.object_type == 'product' %}
               {% render 'product-card', product: item %}
             {% else %}
-              <a href="{{ item.url }}">
-                <h2>{{ item.title }}</h2>
+              <a href="{{ item.url }}" style="display: block; padding: 2rem; background: #FAF8F5; text-decoration: none; color: var(--color-text); height: 100%;">
+                <h3 style="font-family: var(--font-heading-family); font-size: 1.2rem; margin-bottom: 0.5rem;">{{ item.title }}</h3>
+                <p style="font-size: 0.9rem; color: #666;">Read more &rarr;</p>
               </a>
             {% endif %}
           </div>
         {% endfor %}
       </div>
     {% else %}
-      <p>No results found for "{{ search.terms | escape }}".</p>
+      <div style="text-align: center; padding: 4rem 0;">
+        <p style="color: #666; font-size: 1.1rem; margin-bottom: 2rem;">No results found for "{{ search.terms | escape }}". Please try a different search term.</p>
+        <a href="/collections/all" class="button" style="display: inline-block; background-color: #000; color: #fff; padding: 1rem 3rem; text-decoration: none; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em;">Continue Shopping</a>
+      </div>
     {% endif %}
   {% endif %}
 </div>
