@@ -72,9 +72,7 @@
             {%- endcase -%}
           </div>
         {%- endfor -%}
-
-        {%- comment -%} Sort Dropdown Integration {%- endcomment -%}
-        <input type="hidden" name="sort_by" value="{{ collection.sort_by | default: collection.default_sort_by }}">
+        <input type="hidden" name="sort_by" id="SortByHidden" value="{{ collection.sort_by | default: collection.default_sort_by }}">
       </form>
     </aside>
     
@@ -84,17 +82,19 @@
       <!-- Toolbar -->
       <div class="collection-toolbar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;">
         <div style="font-size: 0.75rem; letter-spacing: 0.1em; color: #666; text-transform: uppercase; font-weight: 600;">
-          {% if collection.products_count > 0 %}{{ collection.products_count }}{% else %}152{% endif %} PRODUCTS
+          {{ collection.products_count }} PRODUCTS
         </div>
         
         <div style="display: flex; align-items: center; gap: 2rem;">
           <div style="display: flex; align-items: center; gap: 1rem;">
             <span style="font-size: 0.75rem; letter-spacing: 0.1em; color: #666; text-transform: uppercase;">SORT BY</span>
-            <select style="border: 1px solid #e5e0d8; padding: 0.75rem 2rem 0.75rem 1rem; font-family: var(--font-body-family); font-size: 0.85rem; color: var(--color-text); background: transparent; appearance: none; outline: none;">
-              <option>FEATURED</option>
-              <option>PRICE: LOW TO HIGH</option>
-              <option>PRICE: HIGH TO LOW</option>
-              <option>NEWEST ARRIVALS</option>
+            <select id="SortBySelect" onchange="document.getElementById('SortByHidden').value = this.value; document.getElementById('CollectionFiltersForm').submit();" style="border: 1px solid #e5e0d8; padding: 0.75rem 2rem 0.75rem 1rem; font-family: var(--font-body-family); font-size: 0.85rem; color: var(--color-text); background: transparent; appearance: none; outline: none;">
+              {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+              {% for option in collection.sort_options %}
+                <option value="{{ option.value }}" {% if option.value == sort_by %}selected="selected"{% endif %}>
+                  {{ option.name }}
+                </option>
+              {% endfor %}
             </select>
           </div>
           
@@ -124,35 +124,48 @@
         }
       </style>
       
-      <div class="grid-4-special">
-        {% if collection.products.size > 0 %}
-          {% for product in collection.products %}
-            {% render 'product-card', product: product %}
-          {% endfor %}
-        {% else %}
-          <!-- DUMMY DATA FOR DEMO PURPOSES -->
-          {% render 'product-card', fallback_index: 1 %}
-          {% render 'product-card', fallback_index: 2 %}
-          {% render 'product-card', fallback_index: 3 %}
-          {% render 'product-card', fallback_index: 4 %}
-          {% render 'product-card', fallback_index: 5 %}
-          {% render 'product-card', fallback_index: 6 %}
-          {% render 'product-card', fallback_index: 7 %}
-          {% render 'product-card', fallback_index: 8 %}
-        {% endif %}
-      </div>
-      
-      <!-- Pagination -->
-      <div style="display: flex; justify-content: center; align-items: center; gap: 1.5rem; margin-top: 6rem; font-size: 0.8rem; color: #666;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        <span style="color: var(--color-accent); border-bottom: 2px solid var(--color-accent); padding-bottom: 2px; font-weight: bold;">1</span>
-        <span>2</span>
-        <span>3</span>
-        <span>4</span>
-        <span style="letter-spacing: 2px;">...</span>
-        <span>8</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-      </div>
+      {% paginate collection.products by 16 %}
+        <div class="grid-4-special">
+          {% if collection.products.size > 0 %}
+            {% for product in collection.products %}
+              {% render 'product-card', product: product %}
+            {% endfor %}
+          {% else %}
+            {% assign has_active_filters = false %}
+            {% for filter in collection.filters %}
+              {% if filter.active_values.size > 0 or filter.min_value.value or filter.max_value.value %}
+                {% assign has_active_filters = true %}
+              {% endif %}
+            {% endfor %}
+            
+            {% if has_active_filters %}
+              <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 0;">
+                <p style="font-size: 1.1rem; color: #666; margin-bottom: 1rem;">No products found matching your filters.</p>
+                <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="button" style="background-color: var(--color-accent); color: #fff; padding: 0.8rem 1.5rem; text-decoration: none; display: inline-block;">
+                  Clear Filters
+                </a>
+              </div>
+            {% else %}
+              <!-- DUMMY DATA FOR DEMO PURPOSES -->
+              {% render 'product-card', fallback_index: 1 %}
+              {% render 'product-card', fallback_index: 2 %}
+              {% render 'product-card', fallback_index: 3 %}
+              {% render 'product-card', fallback_index: 4 %}
+              {% render 'product-card', fallback_index: 5 %}
+              {% render 'product-card', fallback_index: 6 %}
+              {% render 'product-card', fallback_index: 7 %}
+              {% render 'product-card', fallback_index: 8 %}
+            {% endif %}
+          {% endif %}
+        </div>
+        
+        <!-- Pagination -->
+        {%- if paginate.pages > 1 -%}
+          <div style="display: flex; justify-content: center; align-items: center; gap: 1.5rem; margin-top: 6rem; font-size: 0.8rem; color: #666;">
+            {{ paginate | default_pagination }}
+          </div>
+        {%- endif -%}
+      {% endpaginate %}
       
     </div>
     
