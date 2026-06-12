@@ -1,0 +1,55 @@
+<div class="contact-newsletter" style="background-color: #FAF8F5; padding: 0 5% 6rem;">
+  <div style="max-width: 1400px; margin: 0 auto; background: #F5F1E9; border-radius: 4px; padding: 4rem 5%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 3rem;">
+    
+    <div class="contact-newsletter__text" style="flex: 1 1 400px;">
+      <h2 style="font-family: var(--font-heading-family); font-size: 2rem; margin-bottom: 0.5rem; letter-spacing: 0.1em; color: var(--color-text);">
+        {{ section.settings.heading }}
+      </h2>
+      <p style="font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-accent); font-weight: 600;">
+        {{ section.settings.subheading }}
+      </p>
+    </div>
+    
+    <div class="contact-newsletter__form-wrapper" style="flex: 1 1 500px; max-width: 600px;">
+      {% form 'customer', class: 'newsletter-form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <input type="email" name="contact[email]" class="contact-form__input" placeholder="Enter your email address" required style="flex: 1; min-width: 200px; padding: 1.25rem 1rem; border: none; background: #fff; font-family: var(--font-body-family); font-size: 0.9rem; margin: 0;">
+          <button type="submit" class="button" style="background-color: var(--color-accent); color: #fff; border: none; padding: 1.25rem 2.5rem; font-size: 0.8rem; letter-spacing: 0.15em;">
+            SUBSCRIBE
+          </button>
+        </div>
+        <p style="font-size: 0.7rem; color: #888; margin-top: 1rem;">We respect your privacy. Unsubscribe at any time.</p>
+        {% if form.posted_successfully? %}
+          <p style="color: green; margin-top: 1rem; font-size: 0.9rem;">Thank you for subscribing!</p>
+        {% endif %}
+      {% endform %}
+    </div>
+    
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Contact Newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "STAY CONNECTED"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "EXCLUSIVE UPDATES, NEW ARRIVALS, AND SPECIAL OFFERS."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact Newsletter"
+    }
+  ]
+}
+{% endschema %}

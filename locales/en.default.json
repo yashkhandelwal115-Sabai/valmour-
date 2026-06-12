@@ -1,0 +1,110 @@
+{
+  "general": {
+    "search": {
+      "search": "Search"
+    },
+    "password_page": {
+      "login_form_heading": "Enter store using password",
+      "login_password_button": "Enter using password",
+      "login_form_password_label": "Password",
+      "login_form_password_placeholder": "Your password",
+      "login_form_submit": "Enter"
+    },
+    "404": {
+      "title": "Page not found",
+      "subtext": "The page you are looking for does not exist.",
+      "link": "Return to home page"
+    },
+    "social": {
+      "alt_text": {
+        "share_on_facebook": "Share on Facebook",
+        "share_on_twitter": "Tweet on Twitter",
+        "share_on_pinterest": "Pin on Pinterest"
+      }
+    },
+    "cart": {
+      "view": "View cart",
+      "item_added": "Item added to your cart",
+      "cart_error": "There was an error adding this item to your cart."
+    },
+    "share": {
+      "copy_to_clipboard": "Copy link",
+      "share_url": "Share link",
+      "success_message": "Link copied to clipboard"
+    }
+  },
+  "sections": {
+    "cart": {
+      "title": "Your cart",
+      "caption": "Cart items",
+      "empty": "Your cart is currently empty.",
+      "checkout": "Check out",
+      "subtotal": "Subtotal",
+      "taxes_and_shipping_policy_at_checkout_html": "Taxes and <a href=\"{{ link }}\">shipping</a> calculated at checkout",
+      "taxes_and_shipping_at_checkout": "Taxes and shipping calculated at checkout"
+    },
+    "header": {
+      "menu": "Menu",
+      "search": "Search",
+      "cart_count": {
+        "one": "{{ count }} item",
+        "other": "{{ count }} items"
+      }
+    },
+    "footer": {
+      "payment": "Payment methods"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "quantity": {
+        "label": "Quantity",
+        "increase": "Increase quantity",
+        "decrease": "Decrease quantity"
+      },
+      "price": {
+        "regular_price": "Regular price",
+        "sale_price": "Sale price",
+        "unit_price": "Unit price"
+      },
+      "pickup_availability": {
+        "title": "Pickup availability",
+        "available": "Pickup available",
+        "unavailable": "Pickup currently unavailable",
+        "refresh": "Refresh",
+        "view_store_info": "View store information",
+        "check_other_stores": "Check availability at other stores"
+      }
+    }
+  },
+  "templates": {
+    "search": {
+      "no_results": "No results found",
+      "results_with_count": {
+        "one": "{{ count }} result",
+        "other": "{{ count }} results"
+      }
+    },
+    "contact": {
+      "form": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone number",
+        "comment": "Message",
+        "send": "Send",
+        "post_success": "Thanks for contacting us. We'll get back to you as soon as possible."
+      }
+    }
+  },
+  "accessibility": {
+    "close": "Close",
+    "skip_to_text": "Skip to content",
+    "link_messages": {
+      "new_window": "Opens in a new window.",
+      "external": "Opens external website."
+    }
+  }
+}

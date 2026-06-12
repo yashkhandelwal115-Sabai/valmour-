@@ -1,0 +1,24 @@
+{
+  "name": "Header group",
+  "type": "header",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "settings": {
+        "text": "FREE SHIPPING WORLDWIDE ON ORDERS OVER $200",
+        "link": ""
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "enable_sticky": true,
+        "transparent_on_home": true
+      }
+    }
+  },
+  "order": [
+    "announcement",
+    "header"
+  ]
+}

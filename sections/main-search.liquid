@@ -1,0 +1,38 @@
+<div class="search-page">
+  <h1>Search</h1>
+  <form action="{{ routes.search_url }}" method="get">
+    <input type="text" name="q" value="{{ search.terms | escape }}">
+    <button type="submit" class="button">Search</button>
+  </form>
+
+  <div class="search-page__filters">
+    <!-- Faceted search filtering -->
+  </div>
+
+  {% if search.performed %}
+    {% if search.results_count > 0 %}
+      <div class="search-page__results grid grid-3">
+        {% for item in search.results %}
+          <div class="search-page__item">
+            {% if item.object_type == 'product' %}
+              {% render 'product-card', product: item %}
+            {% else %}
+              <a href="{{ item.url }}">
+                <h2>{{ item.title }}</h2>
+              </a>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No results found for "{{ search.terms | escape }}".</p>
+    {% endif %}
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Search",
+  "settings": []
+}
+{% endschema %}

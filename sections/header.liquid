@@ -1,0 +1,100 @@
+<header class="header {% if section.settings.enable_sticky %}header--sticky{% endif %} {% if template.name == 'index' and section.settings.transparent_on_home %}header--transparent{% endif %}">
+  <div class="header__container">
+    {% if section.settings.logo != blank %}
+      <a href="{{ routes.root_url }}" class="header__logo">
+        <img src="{{ section.settings.logo | image_url: width: section.settings.logo_width }}" 
+             alt="{{ section.settings.logo.alt | default: shop.name | escape }}"
+             width="{{ section.settings.logo_width }}"
+             height="{{ section.settings.logo_width | divided_by: section.settings.logo.aspect_ratio | round }}"
+             loading="lazy">
+      </a>
+    {% else %}
+      <a href="{{ routes.root_url }}" class="header__logo header__logo--text">VELOUR</a>
+    {% endif %}
+
+    <nav class="header__nav" aria-label="Main Navigation" data-mobile-nav>
+      <ul class="header__menu">
+        {% for link in section.settings.menu.links %}
+          <li class="header__menu-item {% if link.links != blank %}has-dropdown{% endif %}">
+            <a href="{{ link.url }}" class="header__menu-link" {% if link.current %}aria-current="page"{% endif %}>
+              {{ link.title | escape }}
+            </a>
+            {% if link.links != blank %}
+              <ul class="header__submenu">
+                {% for childlink in link.links %}
+                  <li class="header__submenu-item">
+                    <a href="{{ childlink.url }}" class="header__submenu-link" {% if childlink.current %}aria-current="page"{% endif %}>
+                      {{ childlink.title | escape }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+
+    <div class="header__icons">
+      <form action="{{ routes.search_url }}" method="get" class="header__search" role="search">
+        <input type="search" name="q" placeholder="{{ 'general.search.search' | t }}" aria-label="{{ 'general.search.search' | t }}">
+        <button type="submit" class="header__icon">{% render 'icon-search' %}</button>
+      </form>
+
+      <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" class="header__icon" aria-label="Account">
+        {% render 'icon-account' %}
+      </a>
+
+      <a href="{{ routes.cart_url }}" class="header__cart" aria-label="{{ 'sections.header.cart_count' | t: count: cart.item_count }}">
+        {% render 'icon-cart' %}
+        <span class="header__cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+      </a>
+      
+      <button class="header__hamburger" data-mobile-nav-toggle aria-expanded="false" aria-label="{{ 'sections.header.menu' | t }}">
+        {% render 'icon-hamburger' %}
+      </button>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 250,
+      "step": 10,
+      "default": 100,
+      "unit": "px",
+      "label": "Custom logo width"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky",
+      "default": true,
+      "label": "Enable sticky header"
+    },
+    {
+      "type": "checkbox",
+      "id": "transparent_on_home",
+      "default": true,
+      "label": "Enable transparent header on homepage"
+    }
+  ]
+}
+{% endschema %}

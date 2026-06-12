@@ -1,0 +1,32 @@
+<div class="contact-page">
+  <h1>{{ page.title }}</h1>
+  <div class="contact-page__content">
+    {{ page.content }}
+  </div>
+  
+  {% form 'contact' %}
+    {% if form.posted_successfully? %}
+      <p>Thanks for contacting us. We'll get back to you as soon as possible.</p>
+    {% elsif form.errors %}
+      <p>Error submitting the form.</p>
+    {% endif %}
+    
+    <label for="ContactFormName">Name</label>
+    <input type="text" id="ContactFormName" name="contact[name]">
+    
+    <label for="ContactFormEmail">Email</label>
+    <input type="email" id="ContactFormEmail" name="contact[email]" required>
+    
+    <label for="ContactFormMessage">Message</label>
+    <textarea id="ContactFormMessage" name="contact[body]" required></textarea>
+    
+    <button type="submit" class="button">Send</button>
+  {% endform %}
+</div>
+
+{% schema %}
+{
+  "name": "Contact Page",
+  "settings": []
+}
+{% endschema %}

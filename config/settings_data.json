@@ -1,0 +1,25 @@
+{
+  "current": "Default",
+  "presets": {
+    "Default": {
+      "color_bg": "#FAF8F5",
+      "color_surface": "#FFFFFF",
+      "color_text": "#1A1A1A",
+      "color_muted": "#6B6B6B",
+      "color_accent": "#C9A96E",
+      "color_accent_foreground": "#FFFFFF",
+      "color_button": "#1A1A1A",
+      "color_button_text": "#FFFFFF",
+      "font_heading": "cormorant_garamond_n4",
+      "font_body": "dm_sans_n4",
+      "cart_type": "drawer",
+      "social_instagram_link": "",
+      "social_facebook_link": "",
+      "social_pinterest_link": "",
+      "social_tiktok_link": "",
+      "social_twitter_link": "",
+      "social_youtube_link": "",
+      "social_linkedin_link": ""
+    }
+  }
+}

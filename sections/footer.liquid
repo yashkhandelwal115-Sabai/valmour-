@@ -1,0 +1,69 @@
+<footer class="footer" style="background-color: #1A1A1A; color: #FFFFFF; padding: 4rem 5% 2rem;">
+  <div class="footer__top" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; max-width: 1440px; margin: 0 auto 4rem;">
+    
+    <div class="footer__brand">
+      <h2 style="font-family: var(--font-heading-family); font-size: 1.5rem; letter-spacing: 0.1em; margin-bottom: 1rem;">VELOUR</h2>
+      <p style="font-size: 0.75rem; color: #A0A0A0; line-height: 1.6; margin-bottom: 1.5rem;">Timeless fashion.<br>Thoughtfully designed.<br>Beautifully made.</p>
+      {% render 'social-icons' %}
+    </div>
+
+    <div class="footer__link-list">
+      <h4 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600; margin-bottom: 1.5rem;">SHOP</h4>
+      <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.75rem; color: #A0A0A0; line-height: 2;">
+        <li><a href="#" style="color: inherit;">New In</a></li>
+        <li><a href="#" style="color: inherit;">Women</a></li>
+        <li><a href="#" style="color: inherit;">Men</a></li>
+        <li><a href="#" style="color: inherit;">Collections</a></li>
+        <li><a href="#" style="color: inherit;">Sale</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__link-list">
+      <h4 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600; margin-bottom: 1.5rem;">CUSTOMER CARE</h4>
+      <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.75rem; color: #A0A0A0; line-height: 2;">
+        <li><a href="#" style="color: inherit;">Contact Us</a></li>
+        <li><a href="#" style="color: inherit;">Shipping & Delivery</a></li>
+        <li><a href="#" style="color: inherit;">Returns & Exchanges</a></li>
+        <li><a href="#" style="color: inherit;">FAQs</a></li>
+        <li><a href="#" style="color: inherit;">Size Guide</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__link-list">
+      <h4 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600; margin-bottom: 1.5rem;">ABOUT</h4>
+      <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.75rem; color: #A0A0A0; line-height: 2;">
+        <li><a href="#" style="color: inherit;">Our Story</a></li>
+        <li><a href="#" style="color: inherit;">Lookbook</a></li>
+        <li><a href="#" style="color: inherit;">Sustainability</a></li>
+        <li><a href="#" style="color: inherit;">Careers</a></li>
+        <li><a href="#" style="color: inherit;">Store Locator</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__newsletter">
+      <h4 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600; margin-bottom: 1rem;">NEWSLETTER</h4>
+      <p style="font-size: 0.75rem; color: #A0A0A0; line-height: 1.6; margin-bottom: 1.5rem;">Be the first to know about new arrivals and exclusive offers.</p>
+      <form action="#" method="post" style="display: flex;">
+        <input type="email" placeholder="Enter your email" style="background: transparent; border: 1px solid #333; color: #FFF; padding: 0.75rem 1rem; width: 100%; font-size: 0.75rem;">
+        <button type="submit" style="background: var(--color-accent); color: #FFF; border: none; padding: 0 1.5rem; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; white-space: nowrap;">Subscribe</button>
+      </form>
+    </div>
+
+  </div>
+  
+  <div class="footer__bottom" style="display: flex; justify-content: space-between; align-items: center; max-width: 1440px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid #333; font-size: 0.65rem; color: #A0A0A0;">
+    <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+    <div class="footer__payments" style="display: flex; gap: 0.5rem;">
+      {% for type in shop.enabled_payment_types %}
+        {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+      {% endfor %}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": []
+}
+{% endschema %}

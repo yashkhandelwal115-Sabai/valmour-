@@ -1,0 +1,140 @@
+<div class="contact-info-form" style="background-color: #FAF8F5; padding: 6rem 5%;">
+  <div style="max-width: 1400px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 3rem;">
+    
+    <!-- Left Column: Info -->
+    <div class="contact-info__card" style="flex: 1 1 350px; background: #fff; padding: 4rem 3rem; box-shadow: 0 10px 40px rgba(0,0,0,0.04); border-radius: 4px;">
+      <h3 style="font-family: var(--font-heading-family); font-size: 1.25rem; letter-spacing: 0.15em; margin-bottom: 2.5rem; text-transform: uppercase;">
+        Get in Touch
+        <div style="width: 40px; height: 1px; background: var(--color-accent); margin-top: 1rem;"></div>
+      </h3>
+      
+      <div style="display: flex; flex-direction: column; gap: 2.5rem;">
+        <!-- Email -->
+        <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+          <div style="color: var(--color-text); margin-top: 4px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </div>
+          <div>
+            <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #666; margin-bottom: 0.25rem;">Email</div>
+            <a href="mailto:{{ section.settings.email }}" style="font-size: 1rem; color: var(--color-text); text-decoration: none;">{{ section.settings.email }}</a>
+          </div>
+        </div>
+        
+        <!-- Phone -->
+        <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+          <div style="color: var(--color-text); margin-top: 4px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </div>
+          <div>
+            <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #666; margin-bottom: 0.25rem;">Phone</div>
+            <div style="font-size: 1rem; color: var(--color-text);">{{ section.settings.phone }}</div>
+          </div>
+        </div>
+        
+        <!-- Hours -->
+        <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+          <div style="color: var(--color-text); margin-top: 4px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+          <div>
+            <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #666; margin-bottom: 0.25rem;">Hours</div>
+            <div style="font-size: 1rem; color: var(--color-text); white-space: pre-line; line-height: 1.6;">{{ section.settings.hours }}</div>
+          </div>
+        </div>
+        
+        <!-- Address -->
+        <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+          <div style="color: var(--color-text); margin-top: 4px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          </div>
+          <div>
+            <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #666; margin-bottom: 0.25rem;">Address</div>
+            <div style="font-size: 1rem; color: var(--color-text); white-space: pre-line; line-height: 1.6;">{{ section.settings.address }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Column: Form -->
+    <div class="contact-form__card" style="flex: 2 1 500px; background: #fff; padding: 4rem; box-shadow: 0 10px 40px rgba(0,0,0,0.04); border-radius: 4px;">
+      <h3 style="font-family: var(--font-heading-family); font-size: 1.25rem; letter-spacing: 0.15em; margin-bottom: 2.5rem; text-transform: uppercase;">
+        Send us a Message
+        <div style="width: 40px; height: 1px; background: var(--color-accent); margin-top: 1rem;"></div>
+      </h3>
+      
+      <style>
+        .contact-form__input {
+          width: 100%;
+          padding: 1.25rem 1rem;
+          border: 1px solid rgba(0,0,0,0.1);
+          background: transparent;
+          font-family: var(--font-body-family);
+          font-size: 0.9rem;
+          margin-bottom: 1.5rem;
+          transition: border-color 0.3s ease;
+        }
+        .contact-form__input:focus {
+          outline: none;
+          border-color: var(--color-text);
+        }
+        .contact-form__input::placeholder {
+          color: #999;
+        }
+      </style>
+      
+      {% form 'contact', class: 'contact-form' %}
+        {% if form.posted_successfully? %}
+          <p style="color: green; margin-bottom: 2rem;">Thanks for contacting us! We'll get back to you soon.</p>
+        {% endif %}
+        {{ form.errors | default_errors }}
+        
+        <input type="text" name="contact[name]" id="ContactFormName" class="contact-form__input" placeholder="Full Name">
+        <input type="email" name="contact[email]" id="ContactFormEmail" class="contact-form__input" placeholder="Email Address" required>
+        <input type="text" name="contact[subject]" id="ContactFormSubject" class="contact-form__input" placeholder="Subject">
+        <textarea name="contact[body]" id="ContactFormMessage" class="contact-form__input" placeholder="Message" rows="5" required style="resize: vertical; min-height: 150px;"></textarea>
+        
+        <button type="submit" class="button" style="background-color: var(--color-accent); color: #fff; border: none; padding: 1.25rem 3rem; font-size: 0.8rem; letter-spacing: 0.15em; margin-top: 1rem;">
+          SEND MESSAGE
+        </button>
+      {% endform %}
+    </div>
+    
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Contact Info & Form",
+  "settings": [
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email Address",
+      "default": "hello@velour.com"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone Number",
+      "default": "+1 (555) 123-4567"
+    },
+    {
+      "type": "textarea",
+      "id": "hours",
+      "label": "Business Hours",
+      "default": "Monday - Friday\n9:00 AM - 6:00 PM EST"
+    },
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "Address",
+      "default": "Velour Studio\n123 Mercer Street\nNew York, NY 10012\nUnited States"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact Info & Form"
+    }
+  ]
+}
+{% endschema %}

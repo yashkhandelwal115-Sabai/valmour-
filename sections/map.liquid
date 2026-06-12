@@ -1,0 +1,50 @@
+<div class="map-section">
+  {% if section.settings.heading != blank %}
+    <h2 class="map-section__heading">{{ section.settings.heading | escape }}</h2>
+  {% endif %}
+  <div class="map-section__container">
+    {% if section.settings.address != blank %}
+      <div class="map-section__address">
+        {{ section.settings.address }}
+      </div>
+    {% endif %}
+    <div class="map-section__media">
+      {% if section.settings.map_iframe != blank %}
+        {{ section.settings.map_iframe }}
+      {% else %}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg map-section__placeholder' }}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Map",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Our store",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "address",
+      "default": "<p>123 Fake St.<br>Toronto, Canada</p>",
+      "label": "Address"
+    },
+    {
+      "type": "html",
+      "id": "map_iframe",
+      "label": "Map embed snippet",
+      "info": "Paste a Google Maps iframe snippet here."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Map"
+    }
+  ]
+}
+{% endschema %}

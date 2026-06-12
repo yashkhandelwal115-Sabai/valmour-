@@ -1,0 +1,112 @@
+<div class="featured-product">
+  {%- assign product = all_products[section.settings.product] -%}
+  
+  <div class="featured-product__container grid grid-2">
+    <div class="featured-product__media">
+      {% if product != blank and product.media.size > 0 %}
+        {{ product.featured_media | image_url: width: 1000 | image_tag: loading: 'lazy' }}
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg placeholder-svg--product' }}
+      {% endif %}
+    </div>
+
+    <div class="featured-product__info">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when '@app' %}
+            {% render block %}
+            
+          {% when 'title' %}
+            <h2 class="featured-product__title" {{ block.shopify_attributes }}>
+              {% if product != blank %}{{ product.title }}{% else %}Example Product Title{% endif %}
+            </h2>
+            
+          {% when 'price' %}
+            <div class="featured-product__price" {{ block.shopify_attributes }}>
+              {% if product != blank %}
+                {% render 'price', product: product %}
+              {% else %}
+                $19.99
+              {% endif %}
+            </div>
+            
+          {% when 'vendor' %}
+            <div class="featured-product__vendor" {{ block.shopify_attributes }}>
+              {% if product != blank %}{{ product.vendor }}{% else %}Vendor Name{% endif %}
+            </div>
+            
+          {% when 'description' %}
+            <div class="featured-product__description" {{ block.shopify_attributes }}>
+              {% if product != blank %}{{ product.description }}{% else %}Product description placeholder.{% endif %}
+            </div>
+            
+          {% when 'custom_liquid' %}
+            <div class="featured-product__custom-liquid" {{ block.shopify_attributes }}>
+              {{ block.settings.custom_liquid }}
+            </div>
+            
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured product",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1
+    },
+    {
+      "type": "price",
+      "name": "Price",
+      "limit": 1
+    },
+    {
+      "type": "vendor",
+      "name": "Vendor",
+      "limit": 1
+    },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1
+    },
+    {
+      "type": "custom_liquid",
+      "name": "Custom Liquid",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "custom_liquid",
+          "label": "Custom Liquid",
+          "info": "Add app snippets or other Liquid code to create advanced customizations."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured product",
+      "blocks": [
+        { "type": "title" },
+        { "type": "price" },
+        { "type": "description" }
+      ]
+    }
+  ]
+}
+{% endschema %}

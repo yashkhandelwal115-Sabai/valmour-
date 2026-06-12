@@ -1,0 +1,137 @@
+<div class="product-page">
+  <div class="product-page__container">
+    <div class="product-page__media-gallery">
+      {% if product.media.size > 0 %}
+        {% for media in product.media %}
+          <div class="product-page__media-item" data-media-id="{{ media.id }}">
+            {{ media | image_url: width: 1200 | image_tag: loading: 'lazy' }}
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="product-page__media-item">
+          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="product-page__info-wrapper">
+      <div class="product-page__info">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'vendor' %}
+              <div class="product-page__vendor" {{ block.shopify_attributes }}>
+                {{ product.vendor }}
+              </div>
+            {% when 'title' %}
+              <h1 class="product-page__title" {{ block.shopify_attributes }}>
+                {{ product.title }}
+              </h1>
+            {% when 'price' %}
+              <div class="product-page__price" {{ block.shopify_attributes }}>
+                {% render 'price', product: product %}
+              </div>
+            {% when 'description' %}
+              <div class="product-page__description" {{ block.shopify_attributes }}>
+                {{ product.description }}
+              </div>
+            {% when 'buy_buttons' %}
+              <div class="product-page__form-wrapper" {{ block.shopify_attributes }}>
+                <form method="post" action="{{ routes.cart_add_url }}" id="product-form-{{ section.id }}" class="product-form">
+                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                  
+                  {% unless product.has_only_default_variant %}
+                    <div class="product-form__variants">
+                      {% for option in product.options_with_values %}
+                        <div class="product-form__option">
+                          <label class="product-form__option-name">{{ option.name }}</label>
+                          <div class="product-form__swatches">
+                            {% for value in option.values %}
+                              <input type="radio" 
+                                     id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+                                     name="options[{{ option.name | escape }}]"
+                                     value="{{ value | escape }}"
+                                     {% if option.selected_value == value %}checked{% endif %}
+                                     class="visually-hidden">
+                              <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="product-form__swatch-label">
+                                {{ value }}
+                              </label>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  {% endunless %}
+
+                  <div class="product-form__quantity">
+                    <label for="Quantity-{{ section.id }}" class="visually-hidden">Quantity</label>
+                    <div class="quantity-input">
+                      <button class="quantity-input__btn quantity-input__btn--minus" type="button" aria-label="Decrease">&minus;</button>
+                      <input class="quantity-input__field" type="number" name="quantity" id="Quantity-{{ section.id }}" min="1" value="1" form="product-form-{{ section.id }}">
+                      <button class="quantity-input__btn quantity-input__btn--plus" type="button" aria-label="Increase">&plus;</button>
+                    </div>
+                  </div>
+
+                  <div class="product-form__actions">
+                    <button type="submit" class="button button--full-width product-form__submit"
+                      {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+                    >
+                      <span>
+                        {% if product.selected_or_first_available_variant.available %}
+                          Add to cart
+                        {% else %}
+                          Sold out
+                        {% endif %}
+                      </span>
+                    </button>
+                    {% if block.settings.show_dynamic_checkout %}
+                      {{ form | payment_button }}
+                    {% endif %}
+                  </div>
+                </form>
+              </div>
+            {% when 'custom_liquid' %}
+              <div class="product-page__custom-liquid" {{ block.shopify_attributes }}>
+                {{ block.settings.custom_liquid }}
+              </div>
+            {% when '@app' %}
+              {% render block %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Information",
+  "settings": [],
+  "blocks": [
+    { "type": "@app" },
+    { "type": "title", "name": "Title", "limit": 1 },
+    { "type": "vendor", "name": "Vendor", "limit": 1 },
+    { "type": "price", "name": "Price", "limit": 1 },
+    { "type": "description", "name": "Description", "limit": 1 },
+    { 
+      "type": "buy_buttons", 
+      "name": "Buy Buttons", 
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_dynamic_checkout",
+          "default": true,
+          "label": "Show dynamic checkout buttons"
+        }
+      ]
+    },
+    {
+      "type": "custom_liquid",
+      "name": "Custom Liquid",
+      "settings": [
+        { "type": "liquid", "id": "custom_liquid", "label": "Custom Liquid" }
+      ]
+    }
+  ]
+}
+{% endschema %}

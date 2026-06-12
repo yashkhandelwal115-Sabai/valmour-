@@ -1,0 +1,54 @@
+<div class="logo-list">
+  {% if section.settings.heading != blank %}
+    <h2 class="logo-list__heading">{{ section.settings.heading | escape }}</h2>
+  {% endif %}
+  <div class="logo-list__container">
+    {% for block in section.blocks %}
+      <div class="logo-list__item" {{ block.shopify_attributes }}>
+        {% if block.settings.image != blank %}
+          {{ block.settings.image | image_url: width: 400 | image_tag: loading: 'lazy', class: 'logo-list__image' }}
+        {% else %}
+          {{ 'logo' | placeholder_svg_tag: 'logo-list__image placeholder-svg' }}
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Logo list",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Our partners",
+      "label": "Heading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Logo list",
+      "blocks": [
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

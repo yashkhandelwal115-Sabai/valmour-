@@ -1,0 +1,78 @@
+<div class="blog-posts">
+  <div class="blog-posts__header">
+    {% if section.settings.heading != blank %}
+      <h2 class="blog-posts__heading">{{ section.settings.heading | escape }}</h2>
+    {% endif %}
+  </div>
+
+  {%- assign blog = blogs[section.settings.blog] -%}
+
+  <div class="blog-posts__grid grid grid-3">
+    {% if blog != blank and blog.articles_count > 0 %}
+      {% for article in blog.articles limit: section.settings.post_limit %}
+        <div class="blog-posts__item">
+          <a href="{{ article.url }}" class="blog-posts__link">
+            {% if article.image %}
+              {{ article.image | image_url: width: 600 | image_tag: loading: 'lazy', class: 'blog-posts__image' }}
+            {% else %}
+              {{ 'image' | placeholder_svg_tag: 'blog-posts__image placeholder-svg' }}
+            {% endif %}
+            <h3 class="blog-posts__title">{{ article.title | escape }}</h3>
+            <span class="blog-posts__date">{{ article.published_at | time_tag: format: 'date' }}</span>
+            <div class="blog-posts__excerpt">
+              {% if article.excerpt.size > 0 %}
+                {{ article.excerpt }}
+              {% else %}
+                {{ article.content | strip_html | truncatewords: 30 }}
+              {% endif %}
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    {% else %}
+      {% for i in (1..section.settings.post_limit) %}
+        <div class="blog-posts__item">
+          <div class="blog-posts__link">
+            {{ 'image' | placeholder_svg_tag: 'blog-posts__image placeholder-svg' }}
+            <h3 class="blog-posts__title">Blog post title</h3>
+            <span class="blog-posts__date">{{ 'now' | time_tag: format: 'date' }}</span>
+            <div class="blog-posts__excerpt">Your store's blog is a great place to share stories about your products or brand.</div>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Blog posts",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Latest news",
+      "label": "Heading"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3,
+      "label": "Posts to show"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog posts"
+    }
+  ]
+}
+{% endschema %}

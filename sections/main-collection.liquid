@@ -1,0 +1,167 @@
+<div class="main-collection" style="max-width: 1600px; margin: 0 auto; padding: 4rem 5%;">
+  
+  <div style="display: flex; gap: 4rem; align-items: flex-start;">
+    
+    <style>
+      .collection-sidebar { display: none; flex: 0 0 250px; }
+      @media (min-width: 990px) { .collection-sidebar { display: block; } }
+    </style>
+    <!-- Left Sidebar: Filters -->
+    <aside class="collection-sidebar">
+      
+      <button class="button button--outlined" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 3rem; font-size: 0.75rem; letter-spacing: 0.1em; border-color: #e5e0d8; color: var(--color-text);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+        FILTER & SORT
+      </button>
+
+      <form id="CollectionFiltersForm" class="filter-form">
+        {%- for filter in collection.filters -%}
+          <div class="filter-group" style="margin-bottom: 2.5rem; border-bottom: 1px solid #f0f0f0; padding-bottom: 2rem;">
+            <h4 style="font-family: var(--font-heading-family); font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+              {{ filter.label }}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </h4>
+            
+            {%- case filter.type -%}
+              {%- when 'boolean' or 'list' -%}
+                <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                  {%- for value in filter.values -%}
+                    <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; color: {% if value.count == 0 and value.active == false %}#ccc{% else %}#666{% endif %}; font-size: 0.9rem;">
+                      <input type="checkbox"
+                        name="{{ value.param_name }}"
+                        value="{{ value.value }}"
+                        id="Filter-{{ filter.label | escape }}-{{ forloop.index }}"
+                        {% if value.active %}checked{% endif %}
+                        {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                        onchange="document.getElementById('CollectionFiltersForm').submit();"
+                        style="accent-color: var(--color-accent); width: 16px; height: 16px; border: 1px solid #ccc;"
+                      >
+                      {{ value.label | escape }} ({{ value.count }})
+                    </label>
+                  {%- endfor -%}
+                </div>
+              {%- when 'price_range' -%}
+                <div class="filter-price" style="display: flex; align-items: center; gap: 0.5rem;">
+                  <span style="font-size: 0.9rem; color: #666;">$</span>
+                  <input name="{{ filter.min_value.param_name }}"
+                    id="Filter-{{ filter.label | escape }}-GTE"
+                    {%- if filter.min_value.value -%}
+                      value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                    {%- endif -%}
+                    type="number"
+                    placeholder="0"
+                    min="0"
+                    max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                    onchange="document.getElementById('CollectionFiltersForm').submit();"
+                    style="width: 100%; padding: 0.5rem; border: 1px solid #e5e0d8; font-family: var(--font-body-family); font-size: 0.9rem;"
+                  >
+                  <span style="font-size: 0.9rem; color: #666;">- $</span>
+                  <input name="{{ filter.max_value.param_name }}"
+                    id="Filter-{{ filter.label | escape }}-LTE"
+                    {%- if filter.max_value.value -%}
+                      value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                    {%- endif -%}
+                    type="number"
+                    min="0"
+                    placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                    max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                    onchange="document.getElementById('CollectionFiltersForm').submit();"
+                    style="width: 100%; padding: 0.5rem; border: 1px solid #e5e0d8; font-family: var(--font-body-family); font-size: 0.9rem;"
+                  >
+                </div>
+            {%- endcase -%}
+          </div>
+        {%- endfor -%}
+
+        {%- comment -%} Sort Dropdown Integration {%- endcomment -%}
+        <input type="hidden" name="sort_by" value="{{ collection.sort_by | default: collection.default_sort_by }}">
+      </form>
+    </aside>
+    
+    <!-- Right Content: Grid -->
+    <div class="collection-content" style="flex: 1; min-width: 0;">
+      
+      <!-- Toolbar -->
+      <div class="collection-toolbar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;">
+        <div style="font-size: 0.75rem; letter-spacing: 0.1em; color: #666; text-transform: uppercase; font-weight: 600;">
+          {% if collection.products_count > 0 %}{{ collection.products_count }}{% else %}152{% endif %} PRODUCTS
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 2rem;">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <span style="font-size: 0.75rem; letter-spacing: 0.1em; color: #666; text-transform: uppercase;">SORT BY</span>
+            <select style="border: 1px solid #e5e0d8; padding: 0.75rem 2rem 0.75rem 1rem; font-family: var(--font-body-family); font-size: 0.85rem; color: var(--color-text); background: transparent; appearance: none; outline: none;">
+              <option>FEATURED</option>
+              <option>PRICE: LOW TO HIGH</option>
+              <option>PRICE: HIGH TO LOW</option>
+              <option>NEWEST ARRIVALS</option>
+            </select>
+          </div>
+          
+          <div style="display: flex; gap: 0.5rem; color: #999;">
+            <button style="background: transparent; border: 1px solid var(--color-accent); color: var(--color-accent); padding: 0.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 2px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            </button>
+            <button style="background: transparent; border: none; color: inherit; padding: 0.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product Grid -->
+      <style>
+        .grid-4-special {
+          display: grid;
+          grid-template-columns: repeat(1, 1fr);
+          gap: 2rem;
+        }
+        @media (min-width: 600px) {
+          .grid-4-special { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 1200px) {
+          .grid-4-special { grid-template-columns: repeat(4, 1fr); }
+        }
+      </style>
+      
+      <div class="grid-4-special">
+        {% if collection.products.size > 0 %}
+          {% for product in collection.products %}
+            {% render 'product-card', product: product %}
+          {% endfor %}
+        {% else %}
+          <!-- DUMMY DATA FOR DEMO PURPOSES -->
+          {% render 'product-card', fallback_index: 1 %}
+          {% render 'product-card', fallback_index: 2 %}
+          {% render 'product-card', fallback_index: 3 %}
+          {% render 'product-card', fallback_index: 4 %}
+          {% render 'product-card', fallback_index: 5 %}
+          {% render 'product-card', fallback_index: 6 %}
+          {% render 'product-card', fallback_index: 7 %}
+          {% render 'product-card', fallback_index: 8 %}
+        {% endif %}
+      </div>
+      
+      <!-- Pagination -->
+      <div style="display: flex; justify-content: center; align-items: center; gap: 1.5rem; margin-top: 6rem; font-size: 0.8rem; color: #666;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        <span style="color: var(--color-accent); border-bottom: 2px solid var(--color-accent); padding-bottom: 2px; font-weight: bold;">1</span>
+        <span>2</span>
+        <span>3</span>
+        <span>4</span>
+        <span style="letter-spacing: 2px;">...</span>
+        <span>8</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </div>
+      
+    </div>
+    
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection Grid",
+  "settings": []
+}
+{% endschema %}

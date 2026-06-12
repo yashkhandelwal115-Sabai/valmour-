@@ -1,0 +1,37 @@
+{% comment %}
+  Renders a product's price
+
+  Accepts:
+  - product: {Object} Product Liquid object (required)
+
+  Usage:
+  {% render 'price', product: product %}
+{% endcomment %}
+
+<div class="price {% if product.compare_at_price > product.price %}price--on-sale{% endif %}">
+  {% if product.price_varies %}
+    <span class="price__regular">From {{ product.price_min | money }}</span>
+  {% else %}
+    <span class="price__regular">{{ product.price | money }}</span>
+  {% endif %}
+
+  {% if product.compare_at_price > product.price %}
+    <span class="visually-hidden">Regular price</span>
+    <s class="price__compare">{{ product.compare_at_price | money }}</s>
+  {% endif %}
+
+  {% if product.selected_or_first_available_variant.unit_price_measurement %}
+    <div class="price__unit">
+      <span class="visually-hidden">Unit price</span>
+      <span>{{ product.selected_or_first_available_variant.unit_price | money }}</span>
+      <span aria-hidden="true">/</span>
+      <span class="visually-hidden">&nbsp;per&nbsp;</span>
+      <span>
+        {%- if product.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+          {{- product.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+        {%- endif -%}
+        {{ product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+      </span>
+    </div>
+  {% endif %}
+</div>

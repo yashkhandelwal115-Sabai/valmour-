@@ -1,0 +1,59 @@
+<div class="testimonials">
+  {% if section.settings.heading != blank %}
+    <h2 class="testimonials__heading">{{ section.settings.heading | escape }}</h2>
+  {% endif %}
+  <div class="testimonials__grid grid grid-3">
+    {% for block in section.blocks %}
+      <div class="testimonials__item" {{ block.shopify_attributes }}>
+        <blockquote class="testimonials__quote">
+          <p>{{ block.settings.quote | escape }}</p>
+          <cite class="testimonials__author">&mdash; {{ block.settings.author | escape }}</cite>
+        </blockquote>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Testimonials",
+      "label": "Heading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "default": "Add customer reviews and testimonials to showcase your store's happy customers.",
+          "label": "Quote"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "default": "Author's name",
+          "label": "Author"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        { "type": "testimonial" },
+        { "type": "testimonial" },
+        { "type": "testimonial" }
+      ]
+    }
+  ]
+}
+{% endschema %}
