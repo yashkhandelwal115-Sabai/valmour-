@@ -1,0 +1,33 @@
+<div style="background-color: #FAF8F5; padding: 4rem 0; min-height: 80vh;">
+  <div class="page-width" style="max-width: 1440px; margin: 0 auto; padding: 0 5%;">
+    <div style="text-align: center; margin-bottom: 4rem;">
+      <h1 style="font-family: var(--font-heading-family); font-size: 3rem; margin-bottom: 1.5rem; text-transform: uppercase;">Clearance Sale</h1>
+      <p style="color: #666; line-height: 1.8; max-width: 600px; margin: 0 auto;">Shop our exclusive discounted items before they are gone forever. High quality, lower prices.</p>
+    </div>
+
+    <div class="grid-4-special">
+      {% assign sale_items_found = false %}
+      {% for product in collections.all.products %}
+        {% if product.compare_at_price > product.price %}
+          {% assign sale_items_found = true %}
+          {% render 'product-card', product: product %}
+        {% endif %}
+      {% endfor %}
+      
+      {% if sale_items_found == false %}
+        <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 0;">
+          <p style="color: #666; font-size: 1.1rem; margin-bottom: 2rem;">No items are currently on sale. Check back later!</p>
+          <a href="/collections/all" class="button" style="display: inline-block; background-color: #000; color: #fff; padding: 1rem 3rem; text-decoration: none; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em;">Shop All Items</a>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Sale Products",
+  "settings": []
+}
+{% endschema %}
