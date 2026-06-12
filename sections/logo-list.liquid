@@ -18,7 +18,7 @@
   
   <div class="logo-list__marquee logo-list__marquee--reverse">
     {% for i in (1..2) %}
-      {% for block in section.blocks reversed %}
+      {% for block in section.blocks %}
         <div class="logo-list__item" {{ block.shopify_attributes }}>
           {% if block.settings.image != blank %}
             {{ block.settings.image | image_url: width: 400 | image_tag: loading: 'lazy', class: 'logo-list__image' }}
