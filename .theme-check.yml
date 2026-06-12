@@ -1,0 +1,14 @@
+ImgWidthAndHeight:
+  enabled: false
+RemoteAsset:
+  enabled: false
+HardcodedRoutes:
+  enabled: false
+AssetPreload:
+  enabled: false
+OrphanedSnippet:
+  enabled: false
+DeprecatedFontsOnSettingsSchema:
+  enabled: false
+UndefinedObject:
+  enabled: false
