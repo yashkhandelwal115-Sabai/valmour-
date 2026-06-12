@@ -1,4 +1,4 @@
-<header class="header {% if section.settings.enable_sticky %}header--sticky{% endif %} {% if template.name == 'index' and section.settings.transparent_on_home %}header--transparent{% endif %}">
+<header class="header {% if section.settings.enable_sticky %}header--sticky{% endif %} {% if template.name == 'index' and template.suffix == blank and section.settings.transparent_on_home %}header--transparent{% endif %}">
   <div class="header__container">
     {% if section.settings.logo != blank %}
       <a href="{{ routes.root_url }}" class="header__logo">
@@ -36,10 +36,26 @@
     </nav>
 
     <div class="header__icons">
-      <form action="{{ routes.search_url }}" method="get" class="header__search" role="search">
-        <input type="search" name="q" placeholder="{{ 'general.search.search' | t }}" aria-label="{{ 'general.search.search' | t }}">
-        <button type="submit" class="header__icon">{% render 'icon-search' %}</button>
-      </form>
+      <predictive-search>
+        <form action="{{ routes.search_url }}" method="get" class="header__search" role="search">
+          <input 
+            type="search" 
+            name="q" 
+            placeholder="{{ 'general.search.search' | t }}" 
+            aria-label="{{ 'general.search.search' | t }}"
+            role="combobox"
+            aria-expanded="false"
+            aria-owns="predictive-search-results-list"
+            aria-controls="predictive-search-results-list"
+            aria-haspopup="listbox"
+            aria-autocomplete="list"
+            autocomplete="off"
+          >
+          <input type="hidden" name="options[prefix]" value="last">
+          <button type="submit" class="header__icon">{% render 'icon-search' %}</button>
+        </form>
+        <div class="predictive-search" tabindex="-1" data-predictive-search></div>
+      </predictive-search>
 
       <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" class="header__icon" aria-label="Account">
         {% render 'icon-account' %}
@@ -56,6 +72,9 @@
     </div>
   </div>
 </header>
+
+{{ 'predictive-search.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
 
 {% schema %}
 {
