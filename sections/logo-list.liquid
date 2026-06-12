@@ -20,14 +20,12 @@
           {% if block.settings.image != blank %}
             {{ block.settings.image | image_url: width: 400 | image_tag: loading: 'lazy', class: 'logo-list__image' }}
           {% else %}
-            {% assign mod_index = forloop.index | modulo: 6 %}
+            {% assign mod_index = forloop.index | modulo: 4 %}
             <h3 style="font-family: var(--font-heading-family); font-size: 1.5rem; margin: 0; color: var(--color-text); letter-spacing: 0.1em; font-weight: 600; text-transform: uppercase;">
               {% if mod_index == 1 %}ZARA
               {% elsif mod_index == 2 %}GUCCI
               {% elsif mod_index == 3 %}PRADA
-              {% elsif mod_index == 4 %}SAINT LAURENT
-              {% elsif mod_index == 5 %}BURBERRY
-              {% else %}BOSS{% endif %}
+              {% else %}BURBERRY{% endif %}
             </h3>
           {% endif %}
         </div>
