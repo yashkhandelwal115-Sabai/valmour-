@@ -42,7 +42,7 @@
         {% assign fallback_title = 'Minimal Leather Sneakers' %}
         {% assign fallback_price = '$159.00' %}
       {% endif %}
-      <img src="{{ fallback_src }}" srcset="{{ fallback_src | replace: 'w=600', 'w=200' }} 200w, {{ fallback_src | replace: 'w=600', 'w=400' }} 400w, {{ fallback_src }} 600w" sizes="(min-width: 768px) 25vw, 50vw" loading="lazy" class="product-card__image product-card__image--primary" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ fallback_title }}">
+      <img src="{{ fallback_src }}" srcset="{{ fallback_src | replace: 'w=600', 'w=200' }} 200w, {{ fallback_src | replace: 'w=600', 'w=400' }} 400w, {{ fallback_src }} 600w" sizes="(min-width: 768px) 25vw, 50vw" width="600" height="800" loading="lazy" class="product-card__image product-card__image--primary" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ fallback_title }}">
     {% endif %}
     
     <div class="product-card__badges">
