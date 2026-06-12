@@ -44,6 +44,19 @@
       },
       "block_order": ["shipping", "returns", "payments", "quality"]
     },
+    "logo-list": {
+      "type": "logo-list",
+      "settings": {
+        "heading": "TRUSTED BY THE WORLD'S BEST"
+      },
+      "blocks": {
+        "zara": { "type": "logo" },
+        "gucci": { "type": "logo" },
+        "prada": { "type": "logo" },
+        "burberry": { "type": "logo" }
+      },
+      "block_order": ["zara", "gucci", "prada", "burberry"]
+    },
     "instagram": {
       "type": "instagram-feed",
       "settings": {
@@ -63,6 +76,7 @@
   "order": [
     "hero",
     "collections",
+    "logo-list",
     "best-sellers",
     "editorial",
     "trust-icons",
