@@ -1,0 +1,107 @@
+<div style="background-color: #FAF8F5; padding: 4rem 0;">
+  <div class="page-width" style="max-width: 1000px; margin: 0 auto; padding: 0 5%;">
+    <div style="text-align: center; margin-bottom: 4rem;">
+      <h1 style="font-family: var(--font-heading-family); font-size: 3rem; margin-bottom: 1.5rem; text-transform: uppercase;">Size Guide</h1>
+      <p style="color: #666; line-height: 1.8; max-width: 600px; margin: 0 auto;">Use our comprehensive measurement charts to find your perfect fit. Our garments generally run true to size, but we recommend checking specific product descriptions for tailored fit notes.</p>
+    </div>
+
+    <div style="display: grid; gap: 3rem; grid-template-columns: 1fr; align-items: start;">
+      {% style %}
+        @media (min-width: 768px) {
+          .size-grid { grid-template-columns: 1fr 1fr !important; }
+        }
+        .size-table {
+          width: 100%;
+          border-collapse: collapse;
+          background: #fff;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+        .size-table th, .size-table td {
+          padding: 1rem;
+          text-align: center;
+          border-bottom: 1px solid #eee;
+        }
+        .size-table th {
+          background: #000;
+          color: #fff;
+          font-weight: normal;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          font-size: 0.8rem;
+        }
+        .size-table tr:last-child td {
+          border-bottom: none;
+        }
+      {% endstyle %}
+
+      <div class="size-grid" style="display: grid; grid-template-columns: 1fr; gap: 3rem;">
+        <div>
+          <h3 style="font-family: var(--font-heading-family); font-size: 1.5rem; margin-bottom: 1.5rem;">Women's Sizing (Inches)</h3>
+          <table class="size-table">
+            <thead>
+              <tr>
+                <th>Size</th>
+                <th>Bust</th>
+                <th>Waist</th>
+                <th>Hip</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>XS</td><td>32"</td><td>24"</td><td>34"</td></tr>
+              <tr><td>S</td><td>34"</td><td>26"</td><td>36"</td></tr>
+              <tr><td>M</td><td>36"</td><td>28"</td><td>38"</td></tr>
+              <tr><td>L</td><td>38"</td><td>30"</td><td>40"</td></tr>
+              <tr><td>XL</td><td>40"</td><td>32"</td><td>42"</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <h3 style="font-family: var(--font-heading-family); font-size: 1.5rem; margin-bottom: 1.5rem;">Men's Sizing (Inches)</h3>
+          <table class="size-table">
+            <thead>
+              <tr>
+                <th>Size</th>
+                <th>Chest</th>
+                <th>Waist</th>
+                <th>Neck</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>S</td><td>36"</td><td>30"</td><td>14.5"</td></tr>
+              <tr><td>M</td><td>38"</td><td>32"</td><td>15.5"</td></tr>
+              <tr><td>L</td><td>40"</td><td>34"</td><td>16.5"</td></tr>
+              <tr><td>XL</td><td>42"</td><td>36"</td><td>17.5"</td></tr>
+              <tr><td>XXL</td><td>44"</td><td>38"</td><td>18.5"</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem; background: #fff; padding: 3rem; border-radius: 8px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+        <h3 style="font-family: var(--font-heading-family); font-size: 1.5rem; margin-bottom: 1.5rem;">How to Measure</h3>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; text-align: left;">
+          <div style="flex: 1; min-width: 200px;">
+            <p><strong>Bust/Chest:</strong><br>Measure under your arms, around the fullest part of your chest.</p>
+          </div>
+          <div style="flex: 1; min-width: 200px;">
+            <p><strong>Waist:</strong><br>Measure around your natural waistline, keeping the tape comfortably loose.</p>
+          </div>
+          <div style="flex: 1; min-width: 200px;">
+            <p><strong>Hips:</strong><br>Stand with your feet together and measure around the fullest part of your hips.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Size Guide",
+  "settings": []
+}
+{% endschema %}
