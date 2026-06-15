@@ -48,6 +48,40 @@
                         <div class="product-form__option">
                           <label class="product-form__option-name">{{ option.name }}</label>
                           <div class="product-form__swatches">
+                            {% assign downcase_name = option.name | downcase %}
+                            {% if downcase_name == 'size' %}
+                              <div class="size-swatches-container">
+                                {% assign all_sizes = "XS,S,M,L,XL" | split: "," %}
+                                {% for f_size in all_sizes %}
+                                  {% assign is_available = false %}
+                                  {% assign size_exists_in_product = false %}
+                                  {% for variant in product.variants %}
+                                    {% assign opt_idx = option.position | minus: 1 %}
+                                    {% if variant.options[opt_idx] == f_size %}
+                                      {% assign size_exists_in_product = true %}
+                                      {% if variant.available %}
+                                        {% assign is_available = true %}
+                                      {% endif %}
+                                    {% endif %}
+                                  {% endfor %}
+                                  <div class="size-swatch-item {% unless is_available %}is-sold-out{% endunless %}" data-option-position="{{ option.position | minus: 1 }}" data-value="{{ f_size | escape }}">
+                                    <input type="radio" 
+                                           id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+                                           name="options[{{ option.name | escape }}]"
+                                           value="{{ f_size | escape }}"
+                                           {% if option.selected_value == f_size and is_available %}checked{% endif %}
+                                           class="visually-hidden"
+                                           {% unless is_available %}disabled{% endunless %}>
+                                    <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="size-swatch-label">
+                                      {{ f_size }}
+                                    </label>
+                                    <span class="size-swatch-status {% if is_available %}in-stock{% else %}out-of-stock{% endif %}">
+                                      {% if is_available %}In stock{% else %}Out of stock{% endif %}
+                                    </span>
+                                  </div>
+                                {% endfor %}
+                              </div>
+                            {% else %}
                               {% for value in option.values %}
                                 <input type="radio" 
                                        id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
@@ -59,6 +93,7 @@
                                   {{ value }}
                                 </label>
                               {% endfor %}
+                            {% endif %}
                           </div>
                         </div>
                       {% endfor %}
@@ -178,6 +213,35 @@
                             btn.querySelector('span').innerText = 'Unavailable';
                           }
                         }
+
+                        // Update swatch availability states
+                        const swatchItems = document.querySelectorAll('.size-swatch-item');
+                        swatchItems.forEach(item => {
+                          const position = parseInt(item.getAttribute('data-option-position'));
+                          const value = item.getAttribute('data-value');
+                          
+                          const testOptions = [...selectedOptions];
+                          testOptions[position] = value;
+                          
+                          const testVariant = variants.find(v => {
+                            return v.options.every((val, idx) => val === testOptions[idx]);
+                          });
+                          
+                          const statusSpan = item.querySelector('.size-swatch-status');
+                          if (testVariant && testVariant.available) {
+                            item.classList.remove('is-sold-out');
+                            if (statusSpan) {
+                              statusSpan.className = 'size-swatch-status in-stock';
+                              statusSpan.innerText = 'In stock';
+                            }
+                          } else {
+                            item.classList.add('is-sold-out');
+                            if (statusSpan) {
+                              statusSpan.className = 'size-swatch-status out-of-stock';
+                              statusSpan.innerText = 'Out of stock';
+                            }
+                          }
+                        });
                       });
                     });
                   }

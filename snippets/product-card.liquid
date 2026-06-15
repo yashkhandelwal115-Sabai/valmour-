@@ -85,15 +85,44 @@
         <form method="post" action="{{ routes.cart_add_url }}" class="product-card__form">
           <input type="hidden" name="return_to" value="/cart" />
           {% unless product.has_only_default_variant %}
-            <div class="product-card__options" style="margin-bottom: 10px; display: flex; gap: 5px;">
+            <div class="product-card__options" style="margin-bottom: 15px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 15px; align-items: start; text-align: left;">
               {% for option in product.options_with_values %}
-                <select class="product-card__option-select" aria-label="{{ option.name }}" style="width: 100%; padding: 8px; border: 1px solid var(--color-border, #e0e0e0); background: var(--color-background, #fff); color: var(--color-text, #333); font-size: 12px; font-family: inherit; text-transform: capitalize;">
-                  {% for value in option.values %}
-                    <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
-                      {{ value }}
-                    </option>
-                  {% endfor %}
-                </select>
+                <div class="product-card__option-group">
+                  <div class="product-card__option-label" style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--color-muted); font-weight: 600;">{{ option.name }}</div>
+                  {% assign downcase_name = option.name | downcase %}
+                  {% if downcase_name == 'size' %}
+                    <select class="product-card__option-select" name="options[{{ option.name | escape }}]" data-option-position="{{ option.position | minus: 1 }}" aria-label="{{ option.name }}" style="width: 100%; padding: 8px; border: 1px solid var(--color-border, #e0e0e0); background: var(--color-background, #fff); color: var(--color-text, #333); font-size: 12px; font-family: inherit; text-transform: capitalize;">
+                      {% assign all_sizes = "XS,S,M,L,XL" | split: "," %}
+                      {% for f_size in all_sizes %}
+                        {% assign is_available = false %}
+                        {% for variant in product.variants %}
+                          {% assign opt_idx = option.position | minus: 1 %}
+                          {% if variant.options[opt_idx] == f_size and variant.available %}
+                            {% assign is_available = true %}
+                          {% endif %}
+                        {% endfor %}
+                        <option value="{{ f_size | escape }}" {% if option.selected_value == f_size %}selected="selected"{% endif %} {% unless is_available %}disabled{% endunless %}>
+                          {{ f_size }}{% unless is_available %} - Out of stock{% endunless %}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  {% else %}
+                    <select class="product-card__option-select" name="options[{{ option.name | escape }}]" data-option-position="{{ option.position | minus: 1 }}" aria-label="{{ option.name }}" style="width: 100%; padding: 8px; border: 1px solid var(--color-border, #e0e0e0); background: var(--color-background, #fff); color: var(--color-text, #333); font-size: 12px; font-family: inherit; text-transform: capitalize;">
+                      {% for value in option.values %}
+                        {% assign is_available = false %}
+                        {% for variant in product.variants %}
+                          {% assign opt_idx = option.position | minus: 1 %}
+                          {% if variant.options[opt_idx] == value and variant.available %}
+                            {% assign is_available = true %}
+                          {% endif %}
+                        {% endfor %}
+                        <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %} {% unless is_available %}disabled{% endunless %}>
+                          {{ value }}{% unless is_available %} - Out of stock{% endunless %}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  {% endif %}
+                </div>
               {% endfor %}
             </div>
             <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" class="product-card__variant-id" />
@@ -112,9 +141,8 @@
           if (!window.ProductCardOptionsInitialized) {
             window.ProductCardOptionsInitialized = true;
             document.addEventListener('change', function(e) {
-              if (e.target.matches('.product-card__option-select')) {
+              if (e.target.matches('.product-card__option-select') || e.target.matches('.product-card__option-radio')) {
                 var form = e.target.closest('form');
-                var selects = form.querySelectorAll('.product-card__option-select');
                 var jsonEl = form.querySelector('.product-variants-json');
                 if (!jsonEl) return;
                 var variants = JSON.parse(jsonEl.textContent);
@@ -122,7 +150,15 @@
                 var button = form.querySelector('.product-card__quick-add');
                 var buttonText = button.querySelector('span');
 
-                var options = Array.from(selects).map(function(s) { return s.value; });
+                // Get all selected options in order
+                var optionInputs = form.querySelectorAll('[name^="options["]');
+                var selectedInputs = Array.from(optionInputs).filter(function(input) {
+                  if (input.tagName === 'SELECT') return true;
+                  if (input.tagName === 'INPUT' && input.type === 'radio') return input.checked;
+                  return false;
+                });
+                var options = selectedInputs.map(function(input) { return input.value; });
+                
                 var matchedVariant = variants.find(function(variant) {
                   return variant.options.every(function(val, index) {
                     return val === options[index];
@@ -142,6 +178,31 @@
                   button.disabled = true;
                   buttonText.innerText = 'Unavailable';
                 }
+
+                // Update select options availability
+                var selects = form.querySelectorAll('.product-card__option-select');
+                selects.forEach(function(select) {
+                  var position = parseInt(select.getAttribute('data-option-position'));
+                  var optionElements = select.querySelectorAll('option');
+                  optionElements.forEach(function(optEl) {
+                    var value = optEl.value;
+                    
+                    var testOptions = options.slice();
+                    testOptions[position] = value;
+                    
+                    var testVariant = variants.find(function(v) {
+                      return v.options.every(function(val, idx) { return val === testOptions[idx]; });
+                    });
+                    
+                    if (testVariant && testVariant.available) {
+                      optEl.disabled = false;
+                      optEl.innerText = value;
+                    } else {
+                      optEl.disabled = true;
+                      optEl.innerText = value + ' - Out of stock';
+                    }
+                  });
+                });
               }
             });
           }

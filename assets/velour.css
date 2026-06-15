@@ -311,6 +311,66 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--c
 input[type="radio"]:checked + .product-form__swatch-label { background: var(--color-text); color: var(--color-surface); border-color: var(--color-text); }
 input[type="radio"]:hover + .product-form__swatch-label { border-color: var(--color-text); }
 
+/* Premium Swatch Styling (Size specifically) */
+.size-swatches-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.size-swatch-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.size-swatch-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(0,0,0,0.15);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+  user-select: none;
+}
+.size-swatch-label:hover {
+  border-color: var(--color-text);
+}
+input[type="radio"]:checked + .size-swatch-label {
+  background: var(--color-text);
+  color: var(--color-surface);
+  border-color: var(--color-text);
+}
+.size-swatch-item.is-sold-out .size-swatch-label {
+  opacity: 0.4;
+  cursor: not-allowed;
+  position: relative;
+  overflow: hidden;
+}
+.size-swatch-item.is-sold-out .size-swatch-label::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -20%;
+  width: 140%;
+  height: 1px;
+  background-color: var(--color-text);
+  transform: translateY(-50%) rotate(-45deg);
+}
+.size-swatch-status {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.size-swatch-status.in-stock { color: #2e7d32; }
+.size-swatch-status.out-of-stock { color: var(--color-muted); }
+
 /* Quantity & Buttons */
 .product-form__quantity { margin-bottom: 2.5rem; }
 .quantity-input { display: inline-flex; border: 1px solid rgba(0,0,0,0.1); }
