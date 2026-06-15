@@ -43,7 +43,189 @@
         <div class="cart-items__col" style="flex: 2 1 600px;">
           <form action="{{ routes.cart_url }}" method="post" id="cart" class="cart__contents critical-hidden">
             
-            <div class="cart-table__header" style="display: grid; grid-template-columns: 3fr 1fr 1fr 1fr; border-bottom: 1px solid #E5E0D8; padding-bottom: 1rem; margin-bottom: 2rem; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: #666; font-weight: 600;">
+<style>
+  /* Base Desktop Styles */
+  .cart-table__header {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr;
+    border-bottom: 1px solid #E5E0D8;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #666;
+    font-weight: 600;
+  }
+  
+  .cart-item {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr;
+    align-items: center;
+    border-bottom: 1px solid #E5E0D8;
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .cart-item__info {
+    display: flex;
+    gap: 1.5rem;
+  }
+  
+  .cart-item__image {
+    width: 120px;
+    height: 150px;
+    object-fit: cover;
+  }
+  
+  .cart-item__details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .cart-item__title {
+    font-family: var(--font-heading-family);
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+  .cart-item__title a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  
+  .cart-item__variant {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+  }
+  
+  .cart-item__description {
+    font-size: 0.75rem;
+    color: #555;
+    line-height: 1.4;
+    max-width: 200px;
+    margin-bottom: 1rem;
+  }
+  
+  .cart-item__remove {
+    font-size: 0.75rem;
+    text-decoration: underline;
+    color: #666;
+  }
+  .cart-item__remove a {
+    color: inherit;
+  }
+  
+  .cart-item__price--desktop,
+  .cart-item__total--desktop {
+    text-align: right;
+    font-size: 0.9rem;
+  }
+  
+  .cart-item__price--mobile,
+  .cart-item__remove--mobile {
+    display: none;
+  }
+  
+  .cart-item__quantity {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid #E5E0D8;
+    padding: 0.5rem 1rem;
+    gap: 1rem;
+    background: #fff;
+  }
+  .quantity-selector a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .quantity-selector input {
+    font-size: 0.9rem;
+    width: 30px;
+    text-align: center;
+    border: none;
+    background: transparent;
+  }
+
+  /* Mobile Styles */
+  @media (max-width: 768px) {
+    .cart-table__header {
+      display: none !important;
+    }
+    
+    .cart-item {
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      border-bottom: none;
+      align-items: stretch;
+    }
+    
+    .cart-item__info {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    
+    .cart-item__image {
+      width: 90px;
+      height: 120px;
+      flex-shrink: 0;
+    }
+    
+    .cart-item__details {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .cart-item__title {
+      font-size: 1rem;
+      word-break: break-word;
+    }
+    
+    .cart-item__price--desktop,
+    .cart-item__total--desktop,
+    .cart-item__remove--desktop,
+    .cart-item__description {
+      display: none;
+    }
+    
+    .cart-item__price--mobile {
+      display: block;
+      font-weight: 600;
+      margin-top: 10px;
+      font-size: 0.95rem;
+    }
+    
+    .cart-item__quantity {
+      width: 100%;
+      margin-top: 12px;
+      display: block;
+    }
+    
+    .quantity-selector {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .cart-item__remove--mobile {
+      display: block;
+      margin-top: 12px;
+      text-align: center;
+    }
+  }
+</style>
+
+            <div class="cart-table__header">
               <div>Product</div>
               <div style="text-align: right;">Price</div>
               <div style="text-align: center;">Quantity</div>
@@ -51,33 +233,43 @@
             </div>
             
             {% for item in cart.items %}
-              <div class="cart-item" style="display: grid; grid-template-columns: 3fr 1fr 1fr 1fr; align-items: center; border-bottom: 1px solid #E5E0D8; padding-bottom: 2rem; margin-bottom: 2rem;">
-                <div style="display: flex; gap: 1.5rem;">
+              <div class="cart-item">
+                <div class="cart-item__info">
                   {% if item.image %}
-                    <img src="{{ item.image | image_url: width: 300 }}" style="width: 120px; height: 150px; object-fit: cover;" alt="{{ item.title | escape }}">
+                    <img src="{{ item.image | image_url: width: 300 }}" class="cart-item__image" alt="{{ item.title | escape }}">
                   {% endif %}
-                  <div style="display: flex; flex-direction: column; justify-content: center;">
-                    <h3 style="font-family: var(--font-heading-family); font-size: 1.1rem; margin-bottom: 0.25rem;">
-                      <a href="{{ item.url }}" style="color: var(--color-text); text-decoration: none;">{{ item.product.title }}</a>
+                  <div class="cart-item__details">
+                    <h3 class="cart-item__title">
+                      <a href="{{ item.url }}">{{ item.product.title }}</a>
                     </h3>
                     {% unless item.product.has_only_default_variant %}
-                      <p style="font-size: 0.8rem; color: #666; margin-bottom: 0.5rem;">{{ item.variant.title }}</p>
+                      <p class="cart-item__variant">{{ item.variant.title }}</p>
                     {% endunless %}
-                    <p style="font-size: 0.75rem; color: #555; line-height: 1.4; max-width: 200px; margin-bottom: 1rem;">{{ item.product.description | strip_html | truncatewords: 10 }}</p>
-                    <div style="display: flex; gap: 1rem; font-size: 0.75rem; text-decoration: underline; color: #666;">
-                      <a href="{{ item.url_to_remove }}" style="color: inherit;">Remove</a>
+                    <p class="cart-item__description">{{ item.product.description | strip_html | truncatewords: 10 }}</p>
+                    
+                    <div class="cart-item__price--mobile">{{ item.price | money }}</div>
+                    
+                    <div class="cart-item__remove cart-item__remove--desktop">
+                      <a href="{{ item.url_to_remove }}">Remove</a>
                     </div>
                   </div>
                 </div>
-                <div style="text-align: right; font-size: 0.9rem;">{{ item.price | money }}</div>
-                <div style="display: flex; justify-content: center;">
-                  <div style="display: flex; align-items: center; border: 1px solid #E5E0D8; padding: 0.5rem 1rem; gap: 1rem; background: #fff;">
-                    <a href="/cart/change?line={{ forloop.index }}&amp;quantity={{ item.quantity | minus: 1 }}" style="color: inherit; text-decoration: none;">-</a>
-                    <input type="number" name="updates[]" value="{{ item.quantity }}" style="font-size: 0.9rem; width: 30px; text-align: center; border: none; background: transparent;" min="0">
-                    <a href="/cart/change?line={{ forloop.index }}&amp;quantity={{ item.quantity | plus: 1 }}" style="color: inherit; text-decoration: none;">+</a>
+                
+                <div class="cart-item__price--desktop">{{ item.price | money }}</div>
+                
+                <div class="cart-item__quantity">
+                  <div class="quantity-selector">
+                    <a href="/cart/change?line={{ forloop.index }}&amp;quantity={{ item.quantity | minus: 1 }}">-</a>
+                    <input type="number" name="updates[]" value="{{ item.quantity }}" min="0">
+                    <a href="/cart/change?line={{ forloop.index }}&amp;quantity={{ item.quantity | plus: 1 }}">+</a>
                   </div>
                 </div>
-                <div style="text-align: right; font-size: 0.9rem;">{{ item.final_line_price | money }}</div>
+                
+                <div class="cart-item__total--desktop">{{ item.final_line_price | money }}</div>
+                
+                <div class="cart-item__remove cart-item__remove--mobile">
+                  <a href="{{ item.url_to_remove }}">Remove</a>
+                </div>
               </div>
             {% endfor %}
             
