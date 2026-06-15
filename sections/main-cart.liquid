@@ -245,9 +245,33 @@
                     {% unless item.product.has_only_default_variant %}
                       <p class="cart-item__variant">{{ item.variant.title }}</p>
                     {% endunless %}
+                    
+                    {%- if item.selling_plan_allocation != null -%}
+                      <p class="cart-item__selling-plan" style="font-size: 0.75rem; color: var(--color-accent); margin-bottom: 0.5rem; font-style: italic;">
+                        {{ item.selling_plan_allocation.selling_plan.name }}
+                      </p>
+                    {%- endif -%}
+                    
                     <p class="cart-item__description">{{ item.product.description | strip_html | truncatewords: 10 }}</p>
                     
-                    <div class="cart-item__price--mobile">{{ item.price | money }}</div>
+                    <div class="cart-item__price--mobile">
+                      {%- if item.original_line_price != item.final_line_price -%}
+                        <s style="color: #999; font-size: 0.8em; margin-right: 5px;">{{ item.original_line_price | money }}</s>
+                        <span style="color: var(--color-accent);">{{ item.final_line_price | money }}</span>
+                      {%- else -%}
+                        {{ item.original_line_price | money }}
+                      {%- endif -%}
+                      
+                      {%- if item.variant.unit_price_measurement -%}
+                        <div class="unit-price" style="font-size: 0.75rem; color: #666; margin-top: 4px;">
+                          {{ item.variant.unit_price | money }} / 
+                          {%- if item.variant.unit_price_measurement.reference_value != 1 -%}
+                            {{- item.variant.unit_price_measurement.reference_value -}}
+                          {%- endif -%}
+                          {{ item.variant.unit_price_measurement.reference_unit }}
+                        </div>
+                      {%- endif -%}
+                    </div>
                     
                     <div class="cart-item__remove cart-item__remove--desktop">
                       <a href="{{ item.url_to_remove }}">Remove</a>
@@ -255,7 +279,26 @@
                   </div>
                 </div>
                 
-                <div class="cart-item__price--desktop">{{ item.price | money }}</div>
+                <div class="cart-item__price--desktop">
+                  {%- if item.original_price != item.final_price -%}
+                    <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                      <s style="color: #999; font-size: 0.8em;">{{ item.original_price | money }}</s>
+                      <span style="color: var(--color-accent);">{{ item.final_price | money }}</span>
+                    </div>
+                  {%- else -%}
+                    {{ item.original_price | money }}
+                  {%- endif -%}
+                  
+                  {%- if item.variant.unit_price_measurement -%}
+                    <div class="unit-price" style="font-size: 0.75rem; color: #666; margin-top: 4px;">
+                      {{ item.variant.unit_price | money }} / 
+                      {%- if item.variant.unit_price_measurement.reference_value != 1 -%}
+                        {{- item.variant.unit_price_measurement.reference_value -}}
+                      {%- endif -%}
+                      {{ item.variant.unit_price_measurement.reference_unit }}
+                    </div>
+                  {%- endif -%}
+                </div>
                 
                 <div class="cart-item__quantity">
                   <div class="quantity-selector">
@@ -265,7 +308,27 @@
                   </div>
                 </div>
                 
-                <div class="cart-item__total--desktop">{{ item.final_line_price | money }}</div>
+                <div class="cart-item__total--desktop">
+                  {%- if item.original_line_price != item.final_line_price -%}
+                    <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                      <s style="color: #999; font-size: 0.8em;">{{ item.original_line_price | money }}</s>
+                      <span style="color: var(--color-accent);">{{ item.final_line_price | money }}</span>
+                    </div>
+                  {%- else -%}
+                    {{ item.original_line_price | money }}
+                  {%- endif -%}
+                  
+                  {%- if item.line_level_discount_allocations.size > 0 -%}
+                    <ul style="list-style: none; padding: 0; margin: 5px 0 0; font-size: 0.75rem; color: var(--color-accent); text-align: right;">
+                      {%- for discount in item.line_level_discount_allocations -%}
+                        <li style="display: flex; align-items: center; justify-content: flex-end; gap: 4px;">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                          {{ discount.discount_application.title }} (-{{ discount.amount | money }})
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
                 
                 <div class="cart-item__remove cart-item__remove--mobile">
                   <a href="{{ item.url_to_remove }}">Remove</a>
@@ -281,7 +344,26 @@
               <!-- Removed UPDATE CART button -->
             </div>
             
+            {%- if settings.show_cart_note -%}
+              <div class="cart__note" style="margin-top: 3rem;">
+                <label for="Cart-note" style="display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Order Special Instructions</label>
+                <textarea class="text-area text-area--resize-vertical" name="note" id="Cart-note" placeholder="Add a note to your order..." style="width: 100%; min-height: 100px; padding: 1rem; border: 1px solid #E5E0D8; font-family: var(--font-body-family); font-size: 0.9rem; resize: vertical;">{{ cart.note }}</textarea>
+              </div>
+            {%- endif -%}
+            
           </form>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              var cartForm = document.getElementById('cart');
+              var qtyInputs = cartForm.querySelectorAll('.quantity-selector input');
+              qtyInputs.forEach(function(input) {
+                input.addEventListener('change', function() {
+                  cartForm.submit();
+                });
+              });
+            });
+          </script>
         </div>
         
         <!-- Right Column: Sticky Summary -->
@@ -307,10 +389,27 @@
               <span>{{ cart.total_price | times: 0.08 | money }}</span>
             </div>
             
+            {%- if cart.cart_level_discount_applications.size > 0 -%}
+              <div style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #E5E0D8;">
+                <h4 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-accent); margin-bottom: 1rem;">Discounts Applied</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9rem; color: var(--color-accent);">
+                  {%- for discount in cart.cart_level_discount_applications -%}
+                    <li style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                      <span style="display: flex; align-items: center; gap: 6px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                        {{ discount.title }}
+                      </span>
+                      <span>-{{ discount.total_allocated_amount | money }}</span>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+            
             <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; border-top: 1px solid #E5E0D8; padding-top: 2rem;">
               <span style="font-size: 1.2rem; font-family: var(--font-heading-family);">Total</span>
               <div>
-                <span style="font-size: 1.5rem; font-weight: 600;">{{ cart.total_price | times: 1.08 | money }}</span>
+                <span style="font-size: 1.5rem; font-weight: 600;">{{ cart.total_price | money }}</span>
                 <span style="font-size: 0.7rem; color: #666; margin-left: 0.25rem;">USD</span>
               </div>
             </div>
@@ -323,6 +422,12 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
               CHECKOUT
             </button>
+            
+            {%- if additional_checkout_buttons -%}
+              <div class="cart__dynamic-checkout-buttons additional-checkout-buttons" style="margin-top: 1rem;">
+                {{ content_for_additional_checkout_buttons }}
+              </div>
+            {%- endif -%}
             
 
             

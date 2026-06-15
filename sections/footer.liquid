@@ -5,6 +5,12 @@
       <h2 style="font-family: var(--font-heading-family); font-size: 1.5rem; letter-spacing: 0.1em; margin-bottom: 1rem;">VELOUR</h2>
       <p style="font-size: 0.75rem; color: #A0A0A0; line-height: 1.6; margin-bottom: 1.5rem;">Timeless fashion.<br>Thoughtfully designed.<br>Beautifully made.</p>
       {% render 'social-icons' %}
+      
+      {%- if shop.features.follow_on_shop? -%}
+        <div class="footer__follow-on-shop" style="margin-top: 1.5rem;">
+          {{ shop | login_button: action: 'follow' }}
+        </div>
+      {%- endif -%}
     </div>
 
     <div class="footer__link-list">
@@ -57,15 +63,67 @@
 
   </div>
   
-  <div class="footer__bottom" style="display: flex; justify-content: space-between; align-items: center; max-width: 1440px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid #333; font-size: 0.65rem; color: #A0A0A0;">
-    <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
-    <div class="footer__payments" style="display: flex; gap: 0.5rem;">
+  <div class="footer__bottom" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; max-width: 1440px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid #333; font-size: 0.65rem; color: #A0A0A0; gap: 2rem;">
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <div class="footer__localization" style="display: flex; gap: 1rem; align-items: center;">
+        {%- if localization.available_countries.size > 1 -%}
+          <localization-form>
+            {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
+              <div class="localization-form__select" style="position: relative;">
+                <select class="localization-selector" name="country_code" style="background: transparent; color: #A0A0A0; border: 1px solid #333; padding: 0.5rem 2rem 0.5rem 0.5rem; font-size: 0.65rem; appearance: auto; cursor: pointer;">
+                  {%- for country in localization.available_countries -%}
+                    <option value="{{ country.iso_code }}" {%- if country.iso_code == localization.country.iso_code %} selected{% endif %} style="color: #000;">
+                      {{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
+                    </option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            {%- endform -%}
+          </localization-form>
+        {%- endif -%}
+
+        {%- if localization.available_languages.size > 1 -%}
+          <localization-form>
+            {%- form 'localization', id: 'FooterLanguageForm', class: 'localization-form' -%}
+              <div class="localization-form__select" style="position: relative;">
+                <select class="localization-selector" name="locale_code" style="background: transparent; color: #A0A0A0; border: 1px solid #333; padding: 0.5rem 2rem 0.5rem 0.5rem; font-size: 0.65rem; appearance: auto; cursor: pointer;">
+                  {%- for language in localization.available_languages -%}
+                    <option value="{{ language.iso_code }}" {%- if language.iso_code == localization.language.iso_code %} selected{% endif %} style="color: #000;">
+                      {{ language.endonym_name | capitalize }}
+                    </option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            {%- endform -%}
+          </localization-form>
+        {%- endif -%}
+      </div>
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+    </div>
+    
+    <div class="footer__payments" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
       {% for type in shop.enabled_payment_types %}
         {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
       {% endfor %}
     </div>
   </div>
 </footer>
+
+<script>
+  class LocalizationForm extends HTMLElement {
+    constructor() {
+      super();
+      this.querySelector('select')?.addEventListener('change', this.onItemClick.bind(this));
+    }
+
+    onItemClick(event) {
+      event.preventDefault();
+      const form = this.querySelector('form');
+      if (form) form.submit();
+    }
+  }
+  customElements.define('localization-form', LocalizationForm);
+</script>
 
 {% schema %}
 {

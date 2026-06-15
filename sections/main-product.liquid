@@ -4,7 +4,18 @@
       {% if product.media.size > 0 %}
         {% for media in product.media %}
           <div class="product-page__media-item" data-media-id="{{ media.id }}">
-            {{ media | image_url: width: 1200 | image_tag: loading: 'lazy' }}
+            {% case media.media_type %}
+              {% when 'image' %}
+                {{ media | image_url: width: 1200 | image_tag: loading: 'lazy' }}
+              {% when 'external_video' %}
+                {{ media | external_video_tag: class: 'product-media-video' }}
+              {% when 'video' %}
+                {{ media | video_tag: controls: true, class: 'product-media-video' }}
+              {% when 'model' %}
+                {{ media | model_viewer_tag: class: 'product-media-model' }}
+              {% else %}
+                {{ media | media_tag }}
+            {% endcase %}
           </div>
         {% endfor %}
       {% else %}
@@ -109,8 +120,16 @@
                     </div>
                   </div>
 
-                  <div class="product-form__actions">
-                    <button type="submit" class="button button--full-width product-form__submit"
+                  <div class="product-form__buttons">
+                    {%- form 'installments', product -%}
+                      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                      {{ form | payment_terms }}
+                    {%- endform -%}
+
+                    <button
+                      type="submit"
+                      name="add"
+                      class="button button--full-width product-form__submit"
                       {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
                     >
                       <span>
@@ -127,6 +146,19 @@
                   </div>
                 </form>
               </div>
+
+              {%- if product.selected_or_first_available_variant.store_availabilities.size > 0 -%}
+                <div class="pickup-availability-container" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #E5E0D8;">
+                  <div class="pickup-availability-info" style="display: flex; gap: 1rem; align-items: flex-start;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-top: 2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    <div>
+                      <p style="margin: 0; font-size: 0.85rem; font-weight: 600;">Pickup available at <span class="pickup-store-name">{{ product.selected_or_first_available_variant.store_availabilities.first.location.name }}</span></p>
+                      <p style="margin: 4px 0 0; font-size: 0.75rem; color: #666;">Usually ready in 24 hours</p>
+                      <button type="button" class="pickup-availability-button" style="background: none; border: none; padding: 0; margin-top: 8px; font-size: 0.75rem; text-decoration: underline; cursor: pointer; color: inherit;">Check availability at other stores</button>
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
 
               <script>
                 document.addEventListener('DOMContentLoaded', function() {
@@ -183,6 +215,12 @@
                             } else {
                               priceHtml = `<span class="price__regular">${formatMoney(matchedVariant.price)}</span>`;
                             }
+                            
+                            if (matchedVariant.unit_price_measurement) {
+                              const refVal = matchedVariant.unit_price_measurement.reference_value !== 1 ? matchedVariant.unit_price_measurement.reference_value : '';
+                              priceHtml += `<div class="price__unit" style="font-size: 0.75rem; color: #666; margin-top: 4px;"><span class="visually-hidden">Unit price</span><span>${formatMoney(matchedVariant.unit_price)}</span><span aria-hidden="true">/</span><span class="visually-hidden">&nbsp;per&nbsp;</span><span>${refVal}${matchedVariant.unit_price_measurement.reference_unit}</span></div>`;
+                            }
+                            
                             priceContainer.innerHTML = priceHtml;
                           }
 
@@ -245,11 +283,49 @@
                       });
                     });
                   }
+
+                  // Complementary Products Fetch
+                  const complementaryPlaceholder = document.querySelector('.complementary-placeholder');
+                  if (complementaryPlaceholder) {
+                    fetch(complementaryPlaceholder.dataset.url)
+                      .then(response => response.text())
+                      .then(text => {
+                        const html = document.createElement('div');
+                        html.innerHTML = text;
+                        const recommendations = html.querySelector('.product-page__complementary');
+                        if (recommendations && recommendations.innerHTML.trim().length) {
+                          complementaryPlaceholder.parentElement.parentElement.innerHTML = recommendations.innerHTML;
+                        }
+                      })
+                      .catch(e => console.error(e));
+                  }
+
                 });
               </script>
             {% when 'custom_liquid' %}
               <div class="product-page__custom-liquid" {{ block.shopify_attributes }}>
                 {{ block.settings.custom_liquid }}
+              </div>
+            {% when 'complementary_products' %}
+              <div class="product-page__complementary" {{ block.shopify_attributes }} style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #E5E0D8;">
+                <h3 style="font-family: var(--font-heading-family); font-size: 1rem; text-transform: uppercase; margin-bottom: 1rem;">{{ block.settings.heading }}</h3>
+                <div style="display: grid; gap: 1rem;">
+                  {%- if recommendations.performed and recommendations.intent == 'complementary' -%}
+                    {%- for product in recommendations.products limit: block.settings.products_to_show -%}
+                      <div style="display: flex; gap: 1rem; align-items: center;">
+                        {%- if product.featured_media -%}
+                          {{ product.featured_media | image_url: width: 100 | image_tag: style: 'width: 60px; height: auto;' }}
+                        {%- endif -%}
+                        <div>
+                          <a href="{{ product.url }}" style="font-family: var(--font-heading-family); font-size: 0.9rem; text-decoration: none; color: inherit;">{{ product.title }}</a>
+                          <div style="font-size: 0.8rem; color: var(--color-accent);">{{ product.price | money }}</div>
+                        </div>
+                      </div>
+                    {%- endfor -%}
+                  {%- else -%}
+                    <div class="complementary-placeholder" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ block.settings.products_to_show }}&intent=complementary"></div>
+                  {%- endif -%}
+                </div>
               </div>
             {% when '@app' %}
               {% render block %}
@@ -288,6 +364,28 @@
       "name": "Custom Liquid",
       "settings": [
         { "type": "liquid", "id": "custom_liquid", "label": "Custom Liquid" }
+      ]
+    },
+    {
+      "type": "complementary_products",
+      "name": "Complementary products",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Pairs well with",
+          "label": "Heading"
+        },
+        {
+          "type": "range",
+          "id": "products_to_show",
+          "min": 1,
+          "max": 10,
+          "step": 1,
+          "default": 3,
+          "label": "Maximum products to show"
+        }
       ]
     }
   ]

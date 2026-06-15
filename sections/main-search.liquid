@@ -29,6 +29,69 @@
   </div>
 
   {% if search.performed %}
+    {% paginate search.results by 24 %}
+    <div style="display: flex; gap: 4rem; align-items: flex-start;">
+      
+      <!-- Filters Sidebar -->
+      <aside class="search-sidebar" style="flex: 0 0 250px; display: none;">
+        <style>@media (min-width: 990px) { .search-sidebar { display: block !important; } }</style>
+        <button class="button button--outlined" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 3rem; font-size: 0.75rem; letter-spacing: 0.1em; border-color: #e5e0d8; color: var(--color-text);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+          FILTER
+        </button>
+
+        <form id="SearchFiltersForm" class="filter-form" action="{{ routes.search_url }}">
+          <input type="hidden" name="q" value="{{ search.terms | escape }}">
+          <input type="hidden" name="type" value="product,article,page">
+          {%- for filter in search.filters -%}
+            <div class="filter-group" style="margin-bottom: 2.5rem; border-bottom: 1px solid #f0f0f0; padding-bottom: 2rem;">
+              <h4 style="font-family: var(--font-heading-family); font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                {{ filter.label }}
+              </h4>
+              {%- case filter.type -%}
+                {%- when 'boolean' or 'list' -%}
+                  <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                    {%- for value in filter.values -%}
+                      <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; color: {% if value.count == 0 and value.active == false %}#ccc{% else %}#666{% endif %}; font-size: 0.9rem;">
+                        <input type="checkbox"
+                          name="{{ value.param_name }}"
+                          value="{{ value.value }}"
+                          {% if value.active %}checked{% endif %}
+                          {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                          onchange="document.getElementById('SearchFiltersForm').submit();"
+                          style="accent-color: var(--color-accent); width: 16px; height: 16px;"
+                        >
+                        {{ value.label | escape }} ({{ value.count }})
+                      </label>
+                    {%- endfor -%}
+                  </div>
+                {%- when 'price_range' -%}
+                  <div class="filter-price" style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 0.9rem; color: #666;">$</span>
+                    <input name="{{ filter.min_value.param_name }}"
+                      {%- if filter.min_value.value -%}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{%- endif -%}
+                      type="number" min="0" placeholder="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                      onchange="document.getElementById('SearchFiltersForm').submit();"
+                      style="width: 100%; padding: 0.5rem; border: 1px solid #e5e0d8; font-family: var(--font-body-family); font-size: 0.9rem;"
+                    >
+                    <span style="font-size: 0.9rem; color: #666;">- $</span>
+                    <input name="{{ filter.max_value.param_name }}"
+                      {%- if filter.max_value.value -%}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{%- endif -%}
+                      type="number" min="0" placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                      onchange="document.getElementById('SearchFiltersForm').submit();"
+                      style="width: 100%; padding: 0.5rem; border: 1px solid #e5e0d8; font-family: var(--font-body-family); font-size: 0.9rem;"
+                    >
+                  </div>
+              {%- endcase -%}
+            </div>
+          {%- endfor -%}
+          <button type="submit" class="button" style="width: 100%; margin-top: 1rem; background-color: var(--color-accent); color: #fff; border: none; padding: 1rem; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;">
+            Apply Filters
+          </button>
+        </form>
+      </aside>
+
+      <div class="search-content" style="flex: 1; min-width: 0;">
     {% if search.results_count > 0 %}
       <div class="search-page__results grid-4-special">
         {% for item in search.results %}
@@ -44,12 +107,20 @@
           </div>
         {% endfor %}
       </div>
-    {% else %}
-      <div style="text-align: center; padding: 4rem 0;">
-        <p style="color: #666; font-size: 1.1rem; margin-bottom: 2rem;">No results found for "{{ search.terms | escape }}". Please try a different search term.</p>
-        <a href="/collections/all" class="button" style="display: inline-block; background-color: #000; color: #fff; padding: 1rem 3rem; text-decoration: none; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em;">Continue Shopping</a>
-      </div>
-    {% endif %}
+      {% else %}
+        <div style="text-align: center; padding: 4rem 0;">
+          <p style="color: #666; font-size: 1.1rem; margin-bottom: 2rem;">No results found for "{{ search.terms | escape }}". Please try a different search term.</p>
+          <a href="/collections/all" class="button" style="display: inline-block; background-color: #000; color: #fff; padding: 1rem 3rem; text-decoration: none; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em;">Continue Shopping</a>
+        </div>
+      {% endif %}
+      
+      {%- if paginate.pages > 1 -%}
+        <div style="display: flex; justify-content: center; align-items: center; gap: 1.5rem; margin-top: 6rem; font-size: 0.8rem; color: #666;">
+          {{ paginate | default_pagination }}
+        </div>
+      {%- endif -%}
+    </div>
+    {% endpaginate %}
   {% endif %}
 </div>
 

@@ -1,0 +1,64 @@
+<div class="product-recommendations" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}">
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    <div style="padding: 4rem 5%; max-width: 1440px; margin: 0 auto;">
+      <h2 style="font-family: var(--font-heading-family); font-size: 2rem; margin-bottom: 2rem; text-align: center; text-transform: uppercase;">
+        {{ section.settings.heading | escape }}
+      </h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem;">
+        {% for recommendation in recommendations.products %}
+          {% render 'product-card', product: recommendation %}
+        {% endfor %}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const recommendationsSection = document.querySelector('.product-recommendations');
+    if (!recommendationsSection) return;
+
+    fetch(recommendationsSection.dataset.url)
+      .then(response => response.text())
+      .then(text => {
+        const html = document.createElement('div');
+        html.innerHTML = text;
+        const recommendations = html.querySelector('.product-recommendations');
+        
+        if (recommendations && recommendations.innerHTML.trim().length) {
+          recommendationsSection.innerHTML = recommendations.innerHTML;
+        }
+      })
+      .catch(e => {
+        console.error(e);
+      });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "You may also like",
+      "label": "Heading"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "label": "Maximum products to show"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product recommendations"
+    }
+  ]
+}
+{% endschema %}
