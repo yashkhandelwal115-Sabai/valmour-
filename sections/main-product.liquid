@@ -65,11 +65,9 @@
                                 {% assign all_sizes = "XS,S,M,L,XL" | split: "," %}
                                 {% for f_size in all_sizes %}
                                   {% assign is_available = false %}
-                                  {% assign size_exists_in_product = false %}
                                   {% for variant in product.variants %}
                                     {% assign opt_idx = option.position | minus: 1 %}
                                     {% if variant.options[opt_idx] == f_size %}
-                                      {% assign size_exists_in_product = true %}
                                       {% if variant.available %}
                                         {% assign is_available = true %}
                                       {% endif %}
