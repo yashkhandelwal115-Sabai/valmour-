@@ -141,7 +141,97 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--c
 .header__cart { position: relative; display: flex; align-items: center; }
 .header__cart-count { position: absolute; top: -8px; right: -10px; background: var(--color-accent); color: #fff; font-size: 0.65rem; min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; }
 .header__hamburger { background: none; border: none; cursor: pointer; display: none; }
-@media (max-width: 768px) { .header__nav { display: none; } .header__hamburger { display: block; } .header__search { display: none; } }
+@media (max-width: 768px) { 
+  .header__nav { 
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 85vw;
+    max-width: 400px;
+    height: 100vh;
+    background: var(--color-bg);
+    z-index: 1000;
+    transition: left 0.3s ease;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 2rem;
+  } 
+  .header__nav.is-open {
+    left: 0;
+  }
+  .header__menu {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .header__menu-link {
+    font-size: 1.25rem;
+  }
+  .header__hamburger { display: block; } 
+  .header__search { display: none; } 
+
+  .header__icon svg,
+  .mobile-nav-toggle svg,
+  .header__hamburger svg,
+  .header__cart svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .header__icon, .header__hamburger, .header__cart, .mobile-nav-close {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header__icons {
+    gap: 12px;
+  }
+
+  .cart-count-bubble,
+  .header__cart-count {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+  }
+  
+  .mobile-nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  
+  .mobile-nav-overlay.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .mobile-nav-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
+  }
+  
+  .mobile-nav-close {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+}
+@media (min-width: 769px) {
+  .mobile-nav-header, .mobile-nav-overlay {
+    display: none !important;
+  }
+}
 
 /* --- Transparent Header --- */
 .header--transparent { background-color: transparent !important; border-bottom: none !important; position: absolute; width: 100%; top: 0; left: 0; z-index: 100; backdrop-filter: none; -webkit-backdrop-filter: none; padding: 2.5rem 0 1.5rem !important; }
