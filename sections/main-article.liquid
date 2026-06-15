@@ -22,7 +22,14 @@
         {% if form.posted_successfully? %}
           <p>Comment posted successfully!</p>
         {% elsif form.errors %}
-          <p>Error posting comment.</p>
+          <div class="form-errors" style="color: red; margin-bottom: 1rem;">
+            <p>Error posting comment:</p>
+            <ul>
+              {% for error in form.errors %}
+                <li>{{ error }} - {{ form.errors.messages[error] }}</li>
+              {% endfor %}
+            </ul>
+          </div>
         {% endif %}
         <label for="CommentAuthor">Name</label>
         <input type="text" name="comment[author]" id="CommentAuthor" value="{{ form.author }}">
