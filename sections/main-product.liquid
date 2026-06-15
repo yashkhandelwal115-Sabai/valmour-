@@ -48,21 +48,6 @@
                         <div class="product-form__option">
                           <label class="product-form__option-name">{{ option.name }}</label>
                           <div class="product-form__swatches">
-                            {% assign downcase_name = option.name | downcase %}
-                            {% if downcase_name == 'size' %}
-                              {% assign fake_sizes = "S,M,L,XL,XXL" | split: "," %}
-                              {% for f_size in fake_sizes %}
-                                <input type="radio" 
-                                       id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
-                                       name="options[{{ option.name | escape }}]"
-                                       value="{{ f_size | escape }}"
-                                       {% if forloop.index0 == 2 %}checked{% endif %}
-                                       class="visually-hidden">
-                                <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="product-form__swatch-label">
-                                  {{ f_size }}
-                                </label>
-                              {% endfor %}
-                            {% else %}
                               {% for value in option.values %}
                                 <input type="radio" 
                                        id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
@@ -74,7 +59,6 @@
                                   {{ value }}
                                 </label>
                               {% endfor %}
-                            {% endif %}
                           </div>
                         </div>
                       {% endfor %}
@@ -153,15 +137,45 @@
                             btn.disabled = !matchedVariant.available;
                             btn.querySelector('span').innerText = matchedVariant.available ? 'Add to cart' : 'Sold out';
                           }
-                        } else {
-                          // Fallback for demo sizes
-                          if (variants.length > 0) {
-                            variantInput.value = variants[0].id;
-                            const btn = document.querySelector('.product-form__submit');
-                            if (btn) {
-                              btn.disabled = false;
-                              btn.querySelector('span').innerText = 'Add to cart';
+
+                          // Update Price
+                          const priceContainer = document.querySelector('.product-page__price .price');
+                          if (priceContainer) {
+                            let priceHtml = '';
+                            const formatMoney = (cents) => '$' + (cents / 100).toFixed(2);
+                            if (matchedVariant.compare_at_price > matchedVariant.price) {
+                              priceHtml = `<span class="price__regular" style="color:var(--color-accent);">${formatMoney(matchedVariant.price)}</span> <s class="price__compare">${formatMoney(matchedVariant.compare_at_price)}</s>`;
+                            } else {
+                              priceHtml = `<span class="price__regular">${formatMoney(matchedVariant.price)}</span>`;
                             }
+                            priceContainer.innerHTML = priceHtml;
+                          }
+
+                          // Update Image
+                          if (matchedVariant.featured_media) {
+                            const targetId = matchedVariant.featured_media.id;
+                            const targetMedia = document.querySelector(`.product-page__media-item[data-media-id="${targetId}"]`);
+                            if (targetMedia) {
+                               targetMedia.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                          }
+                          
+                          // Update SKU
+                          const skuEl = document.querySelector('.product-page__sku');
+                          if (skuEl) skuEl.innerText = matchedVariant.sku || '';
+
+                          // Update Inventory
+                          const invEl = document.querySelector('.product-page__inventory');
+                          if (invEl) {
+                             if (!matchedVariant.available) invEl.innerText = 'Out of stock';
+                             else invEl.innerText = matchedVariant.inventory_quantity > 0 ? `${matchedVariant.inventory_quantity} in stock` : 'In stock';
+                          }
+
+                        } else {
+                          const btn = document.querySelector('.product-form__submit');
+                          if (btn) {
+                            btn.disabled = true;
+                            btn.querySelector('span').innerText = 'Unavailable';
                           }
                         }
                       });
