@@ -1,17 +1,27 @@
-<div class="split-editorial split-editorial--{{ section.settings.layout }} reveal-stagger-container">
-  <div class="split-editorial__image-wrapper reveal-stagger-child">
+<div class="split-editorial split-editorial--{{ section.settings.layout }}">
+  <div class="split-editorial__image-wrapper">
     {% if section.settings.image != blank %}
       {{ section.settings.image | image_url: width: 1500 | image_tag: loading: 'lazy', class: 'split-editorial__image' }}
     {% else %}
-      <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1200&auto=format&fit=crop" width="1200" height="800" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; min-height: 600px;" alt="Minimalism">
+      <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1200&auto=format&fit=crop" class="split-editorial__image" width="1200" height="800" loading="lazy" alt="Minimalism">
     {% endif %}
+    
+    <!-- Sunglasses Light Sweep Overlay -->
+    <div class="split-editorial__sunglasses-reflection-container">
+      <div class="split-editorial__sunglasses-reflection"></div>
+    </div>
   </div>
-  <div class="split-editorial__content reveal-stagger-child">
+  <div class="split-editorial__content">
     {% if section.settings.eyebrow != blank %}
       <span class="split-editorial__eyebrow">{{ section.settings.eyebrow | escape }}</span>
     {% endif %}
     {% if section.settings.heading != blank %}
-      <h2 class="split-editorial__heading">{{ section.settings.heading | escape }}</h2>
+      <h2 class="split-editorial__heading">
+        {% assign heading_words = section.settings.heading | split: ' ' %}
+        {% for word in heading_words %}
+          <span class="split-editorial__word split-editorial__word--{{ forloop.index }}">{{ word | escape }}</span>
+        {% endfor %}
+      </h2>
     {% endif %}
     {% if section.settings.body != blank %}
       <div class="split-editorial__body">{{ section.settings.body }}</div>
@@ -21,6 +31,68 @@
     {% endif %}
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.split-editorial').forEach((section) => {
+      // 1. Intersection Observer for Scroll Reveal
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            section.classList.add('reveal-active');
+            observer.unobserve(section);
+          }
+        });
+      }, {
+        threshold: 0.1
+      });
+      observer.observe(section);
+
+      // 2. Parallax Effect on Scroll
+      const img = section.querySelector('.split-editorial__image');
+      if (img) {
+        let ticking = false;
+        const handleParallax = () => {
+          const rect = section.getBoundingClientRect();
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            const relativeY = rect.top;
+            const yTranslate = relativeY * 0.08;
+            section.style.setProperty('--img-y', `${yTranslate}px`);
+          }
+          ticking = false;
+        };
+
+        window.addEventListener('scroll', () => {
+          if (!ticking) {
+            window.requestAnimationFrame(handleParallax);
+            ticking = true;
+          }
+        }, { passive: true });
+      }
+
+      // 3. Mouse Interaction (max 5px movement)
+      section.addEventListener('mousemove', (e) => {
+        const rect = section.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const moveX = ((mouseX - centerX) / centerX) * 5;
+        const moveY = ((mouseY - centerY) / centerY) * 5;
+
+        section.style.setProperty('--mouse-x', `${moveX}px`);
+        section.style.setProperty('--mouse-y', `${moveY}px`);
+      });
+
+      section.addEventListener('mouseleave', () => {
+        section.style.setProperty('--mouse-x', '0px');
+        section.style.setProperty('--mouse-y', '0px');
+      });
+    });
+  });
+</script>
 
 {% schema %}
 {
