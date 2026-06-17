@@ -1,51 +1,47 @@
-<div class="hero" style="--overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}">
+{{ 'cinematic-hero.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'cinematic-hero.js' | asset_url }}" defer="defer"></script>
+
+<div class="hero cinematic-hero" style="--overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}">
+  
+  <!-- Background Image Layer -->
   {% if section.settings.image != blank %}
-    {{ section.settings.image | image_url: width: 3840 | image_tag: 
-       loading: 'eager', 
-       class: 'hero__image',
-       style: 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;'
-    }}
+    {{ section.settings.image | image_url: width: 3840 | image_tag: class: 'cinematic-hero__bg', loading: 'eager', fetchpriority: 'high' }}
   {% else %}
-    <img 
-      src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=2560&auto=format&fit=crop" 
-      srcset="
-        https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=400&auto=format&fit=crop 400w,
-        https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=600&auto=format&fit=crop 600w,
-        https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=800&auto=format&fit=crop 800w,
-        https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=1200&auto=format&fit=crop 1200w,
-        https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=1600&auto=format&fit=crop 1600w,
-        https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=2560&auto=format&fit=crop 2560w
-      "
-      sizes="100vw"
-      fetchpriority="high"
-      class="hero__image" 
-      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;" 
-      alt="Timeless Elegance"
-    >
+    <img src="{{ 'high_fashion_hero.png' | asset_url }}" class="cinematic-hero__bg" alt="Luxury Fashion">
   {% endif %}
 
-  <div class="hero__content">
+  <!-- Vanilla JS Particle Engine Canvas -->
+  <canvas class="cinematic-hero__canvas"></canvas>
+
+  <!-- Typography Content Layer -->
+  <div class="cinematic-hero__content">
     {% if section.settings.heading != blank %}
-      <h1 class="hero__heading">{{ section.settings.heading | escape }}</h1>
-    {% endif %}
-    {% if section.settings.subheading != blank %}
-      <p class="hero__subheading">{{ section.settings.subheading | escape }}</p>
+      <h1 class="cinematic-hero__heading">{{ section.settings.heading | escape }}</h1>
     {% endif %}
     
-    <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="button">
-      {{ section.settings.button_label | default: 'SHOP NEW IN' }}
-    </a>
+    {% if section.settings.subheading != blank %}
+      <p class="cinematic-hero__subheading">{{ section.settings.subheading | escape }}</p>
+    {% endif %}
+    
+    {% if section.settings.button_label != blank %}
+      <div class="cinematic-hero__button-wrapper">
+        <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="cinematic-hero__button">
+          {{ section.settings.button_label | escape }}
+        </a>
+      </div>
+    {% endif %}
   </div>
 </div>
 
 {% schema %}
 {
-  "name": "Hero banner",
+  "name": "Live Cinematic Hero",
   "settings": [
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Image"
+      "label": "Base Hero Image",
+      "info": "This image will be animated using CSS."
     },
     {
       "type": "range",
@@ -53,26 +49,26 @@
       "min": 0,
       "max": 100,
       "step": 10,
-      "default": 50,
+      "default": 30,
       "unit": "%",
-      "label": "Image overlay opacity"
+      "label": "Video overlay opacity"
     },
     {
       "type": "text",
       "id": "heading",
-      "default": "TIMELESS ELEGANCE",
+      "default": "VELOUR",
       "label": "Heading"
     },
     {
       "type": "text",
       "id": "subheading",
-      "default": "Elevated essentials for the modern wardrobe.",
+      "default": "TIMELESS ELEGANCE",
       "label": "Subheading"
     },
     {
       "type": "text",
       "id": "button_label",
-      "default": "SHOP NEW IN",
+      "default": "SHOP COLLECTION",
       "label": "Button label"
     },
     {
@@ -83,7 +79,7 @@
   ],
   "presets": [
     {
-      "name": "Hero banner"
+      "name": "Live Cinematic Hero"
     }
   ]
 }

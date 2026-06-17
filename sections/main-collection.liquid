@@ -210,7 +210,7 @@
       </style>
       
       {% paginate collection.products by 36 %}
-        <div id="product-grid-container" class="grid-4-special">
+        <div id="product-grid-container" class="grid-4-special reveal-stagger-container">
           {% if collection.products.size > 0 %}
             {% for product in collection.products %}
               {% assign product_category = 'all' %}
@@ -226,7 +226,7 @@
                  {% assign product_category = 'all' %}
               {% endif %}
 
-              <div class="filterable-product" data-category="{{ product_category }}">
+              <div class="filterable-product reveal-stagger-child" data-category="{{ product_category }}">
                 {% render 'product-card', product: product %}
               </div>
             {% endfor %}
@@ -247,14 +247,14 @@
               </div>
             {% else %}
               <!-- DUMMY DATA FOR DEMO PURPOSES -->
-              <div class="filterable-product" data-category="men">{% render 'product-card', fallback_index: 1 %}</div>
-              <div class="filterable-product" data-category="men">{% render 'product-card', fallback_index: 2 %}</div>
-              <div class="filterable-product" data-category="women">{% render 'product-card', fallback_index: 3 %}</div>
-              <div class="filterable-product" data-category="men">{% render 'product-card', fallback_index: 4 %}</div>
-              <div class="filterable-product" data-category="women">{% render 'product-card', fallback_index: 5 %}</div>
-              <div class="filterable-product" data-category="women">{% render 'product-card', fallback_index: 6 %}</div>
-              <div class="filterable-product" data-category="women">{% render 'product-card', fallback_index: 7 %}</div>
-              <div class="filterable-product" data-category="men">{% render 'product-card', fallback_index: 8 %}</div>
+              <div class="filterable-product reveal-stagger-child" data-category="men">{% render 'product-card', fallback_index: 1 %}</div>
+              <div class="filterable-product reveal-stagger-child" data-category="men">{% render 'product-card', fallback_index: 2 %}</div>
+              <div class="filterable-product reveal-stagger-child" data-category="women">{% render 'product-card', fallback_index: 3 %}</div>
+              <div class="filterable-product reveal-stagger-child" data-category="men">{% render 'product-card', fallback_index: 4 %}</div>
+              <div class="filterable-product reveal-stagger-child" data-category="women">{% render 'product-card', fallback_index: 5 %}</div>
+              <div class="filterable-product reveal-stagger-child" data-category="women">{% render 'product-card', fallback_index: 6 %}</div>
+              <div class="filterable-product reveal-stagger-child" data-category="women">{% render 'product-card', fallback_index: 7 %}</div>
+              <div class="filterable-product reveal-stagger-child" data-category="men">{% render 'product-card', fallback_index: 8 %}</div>
             {% endif %}
           {% endif %}
         </div>

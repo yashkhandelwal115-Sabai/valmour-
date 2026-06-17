@@ -7,22 +7,22 @@
 
   {%- assign collection = collections[section.settings.collection] -%}
 
-  <div class="featured-collection__grid grid grid-2 grid-4--desktop">
+  <div class="featured-collection__grid grid grid-2 grid-4--desktop reveal-stagger-container">
     {% if collection != blank %}
       {% for product in collection.products limit: section.settings.products_to_show %}
-        <div class="featured-collection__item">
+        <div class="featured-collection__item reveal-stagger-child">
           {% render 'product-card', product: product %}
         </div>
       {% endfor %}
     {% elsif collections.all.products.size > 0 %}
       {% for product in collections.all.products limit: section.settings.products_to_show %}
-        <div class="featured-collection__item">
+        <div class="featured-collection__item reveal-stagger-child">
           {% render 'product-card', product: product %}
         </div>
       {% endfor %}
     {% else %}
       {% for i in (1..section.settings.products_to_show) %}
-        <div class="featured-collection__item">
+        <div class="featured-collection__item reveal-stagger-child">
           {% render 'product-card', product: nil, fallback_index: i %}
         </div>
       {% endfor %}

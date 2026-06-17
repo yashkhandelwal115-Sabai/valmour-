@@ -3,9 +3,9 @@
     "hero": {
       "type": "hero-banner",
       "settings": {
-        "heading": "TIMELESS ELEGANCE",
-        "subheading": "Elevated essentials for the modern wardrobe.",
-        "button_label": "SHOP NEW IN"
+        "heading": "VELOUR",
+        "subheading": "TIMELESS ELEGANCE",
+        "button_label": "SHOP COLLECTION"
       }
     },
     "collections": {

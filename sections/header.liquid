@@ -42,26 +42,9 @@
     <div class="mobile-nav-overlay"></div>
 
     <div class="header__icons">
-      <predictive-search>
-        <form action="{{ routes.search_url }}" method="get" class="header__search" role="search">
-          <input 
-            type="search" 
-            name="q" 
-            placeholder="{{ 'general.search.search' | t }}" 
-            aria-label="{{ 'general.search.search' | t }}"
-            role="combobox"
-            aria-expanded="false"
-            aria-owns="predictive-search-results-list"
-            aria-controls="predictive-search-results-list"
-            aria-haspopup="listbox"
-            aria-autocomplete="list"
-            autocomplete="off"
-          >
-          <input type="hidden" name="options[prefix]" value="last">
-          <button type="submit" class="header__icon">{% render 'icon-search' %}</button>
-        </form>
-        <div class="predictive-search" tabindex="-1" data-predictive-search></div>
-      </predictive-search>
+      <button type="button" class="header__icon" data-search-drawer-toggle aria-label="Search">
+        {% render 'icon-search' %}
+      </button>
 
       <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" class="header__icon" aria-label="Account">
         {% render 'icon-account' %}
@@ -78,6 +61,36 @@
     </div>
   </div>
 </header>
+
+<div class="search-drawer" id="SearchDrawer">
+  <div class="search-drawer__container">
+    <button class="search-drawer__close" aria-label="Close search">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+    <predictive-search>
+      <form action="{{ routes.search_url }}" method="get" class="search-drawer__form" role="search">
+        <input 
+          class="search-drawer__input"
+          type="search" 
+          name="q" 
+          placeholder="Search collections, products..." 
+          aria-label="Search"
+          role="combobox"
+          aria-expanded="false"
+          aria-owns="predictive-search-results-list"
+          aria-controls="predictive-search-results-list"
+          aria-haspopup="listbox"
+          aria-autocomplete="list"
+          autocomplete="off"
+        >
+        <input type="hidden" name="options[prefix]" value="last">
+        <button type="submit" class="header__icon" style="padding: 0.5rem; display: flex; align-items: center; justify-content: center;">{% render 'icon-search' %}</button>
+      </form>
+      <div class="predictive-search" tabindex="-1" data-predictive-search></div>
+    </predictive-search>
+  </div>
+</div>
+<div class="search-drawer-overlay"></div>
 
 {{ 'predictive-search.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>

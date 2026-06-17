@@ -1,0 +1,157 @@
+/* Cinematic Hero Styles */
+.cinematic-hero {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cinematic-hero__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  /* Phase 1: Entrance (Scale 1.4 -> 1.2, pan from left to center) */
+  transform: scale(1.4) translateX(5%);
+  transition: transform 3s cubic-bezier(0.25, 1, 0.5, 1), filter 3s ease-in-out;
+  will-change: transform, filter;
+  opacity: 0.8;
+}
+
+/* Phase 2: Center and Zoom */
+.cinematic-hero.phase-2 .cinematic-hero__bg {
+  transform: scale(1.1) translateX(0);
+}
+
+/* Phase 3/4: Depth of field blur */
+.cinematic-hero.phase-3 .cinematic-hero__bg,
+.cinematic-hero.phase-4 .cinematic-hero__bg {
+  transform: scale(1.05) translateX(0);
+  filter: blur(6px) brightness(0.5);
+}
+
+/* Continuous breathing animation for Phase 4 */
+@keyframes cinematicBreathe {
+  0% { transform: scale(1.05) translateX(0); filter: blur(6px) brightness(0.5); }
+  100% { transform: scale(1.08) translateX(0); filter: blur(4px) brightness(0.6); }
+}
+
+.cinematic-hero.phase-4 .cinematic-hero__bg {
+  animation: cinematicBreathe 15s ease-in-out infinite alternate;
+}
+
+/* Canvas overlay for particles */
+.cinematic-hero__canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Typography Container */
+.cinematic-hero__content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* VELOUR Heading */
+.cinematic-hero__heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(4rem, 12vw, 10rem);
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: 0.2em;
+  color: transparent;
+  background: linear-gradient(to bottom, #fff 0%, #d4af37 60%, #8a6508 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  
+  /* Initial hidden state */
+  opacity: 0;
+  filter: blur(20px);
+  transform: scale(1.2);
+  transition: opacity 2.5s ease-out, filter 2.5s ease-out, transform 2.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Phase 3: Brand Reveal */
+.cinematic-hero.phase-3 .cinematic-hero__heading,
+.cinematic-hero.phase-4 .cinematic-hero__heading {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
+  letter-spacing: 0.1em;
+}
+
+/* Subheading & Button */
+.cinematic-hero__subheading {
+  font-size: 1rem;
+  letter-spacing: 0.3em;
+  color: #fff;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+  text-transform: uppercase;
+  margin-top: 1rem;
+}
+
+.cinematic-hero__button-wrapper {
+  margin-top: 3rem;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+  transition-delay: 0.3s;
+}
+
+.cinematic-hero__button {
+  padding: 1rem 3rem;
+  background: transparent;
+  border: 1px solid #d4af37;
+  color: #d4af37;
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cinematic-hero__button::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: #d4af37;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: -1;
+}
+
+.cinematic-hero__button:hover {
+  color: #000;
+}
+
+.cinematic-hero__button:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Phase 4: Final Reveal */
+.cinematic-hero.phase-4 .cinematic-hero__subheading,
+.cinematic-hero.phase-4 .cinematic-hero__button-wrapper {
+  opacity: 1;
+  transform: translateY(0);
+}

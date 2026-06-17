@@ -1,13 +1,13 @@
 <div class="newsletter section-newsletter">
-  <div class="newsletter__container">
+  <div class="newsletter__container reveal-stagger-container">
     {% if section.settings.heading != blank %}
-      <h2 class="newsletter__heading">{{ section.settings.heading | escape }}</h2>
+      <h2 class="newsletter__heading reveal-stagger-child">{{ section.settings.heading | escape }}</h2>
     {% endif %}
     {% if section.settings.subheading != blank %}
-      <p class="newsletter__subheading">{{ section.settings.subheading | escape }}</p>
+      <p class="newsletter__subheading reveal-stagger-child">{{ section.settings.subheading | escape }}</p>
     {% endif %}
 
-    {% form 'customer', class: 'newsletter__form' %}
+    {% form 'customer', class: 'newsletter__form reveal-stagger-child' %}
       <input type="hidden" name="contact[tags]" value="newsletter">
       <div class="newsletter__field">
         <label for="NewsletterEmail-{{ section.id }}" class="visually-hidden">Email</label>

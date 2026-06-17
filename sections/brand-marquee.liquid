@@ -1,0 +1,36 @@
+<div class="brand-marquee" style="--marquee-speed: {{ section.settings.speed }}s">
+  {% assign brands = "VELORA, AURELLE, NOVÉRA, ÉLORIA, VALENCE, LUNÉRA" | split: ", " %}
+  
+  <div class="brand-marquee__track">
+    {% for i in (1..4) %}
+      <div class="brand-marquee__list">
+        {% for brand in brands %}
+          <div class="brand-marquee__item">{{ brand }}</div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Brand Marquee",
+  "settings": [
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "default": 30,
+      "unit": "s",
+      "label": "Animation Speed"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Marquee"
+    }
+  ]
+}
+{% endschema %}

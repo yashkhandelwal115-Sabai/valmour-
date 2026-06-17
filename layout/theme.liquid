@@ -55,9 +55,32 @@
     {{ 'velour.css' | asset_url | stylesheet_tag }}
 
     {{ content_for_header }}
+
+    <script>
+      if (sessionStorage.getItem('velour_transition_active') === 'true') {
+        document.documentElement.classList.add('has-active-transition');
+        
+        // Wait for page to fully load, then hold for 1.2s, then fade out
+        window.addEventListener('DOMContentLoaded', () => {
+          setTimeout(() => {
+            document.documentElement.classList.remove('has-active-transition');
+            sessionStorage.removeItem('velour_transition_active');
+          }, 1200);
+        });
+      }
+    </script>
   </head>
 
   <body class="template-{{ template.name }}">
+    <div class="luxury-transition-overlay">
+      <div class="luxury-transition-overlay__bg"></div>
+      <div class="luxury-transition-overlay__circle"></div>
+      <div class="luxury-transition-overlay__content">
+        <h2 class="luxury-transition-overlay__logo">VELOUR</h2>
+        <div class="luxury-transition-overlay__subtitle">Timeless Elegance</div>
+      </div>
+    </div>
+    {% render 'velour-preloader' %}
     <a class="skip-to-content-link" href="#MainContent">
       {{ 'accessibility.skip_to_text' | t }}
     </a>
