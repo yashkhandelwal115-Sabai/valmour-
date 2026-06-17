@@ -394,6 +394,13 @@ function initVelourPreloader() {
   const preloader = document.getElementById('velour-preloader');
   if (!preloader) return;
 
+  if (sessionStorage.getItem('velour_preloader_played') === 'true') {
+    preloader.style.display = 'none';
+    document.body.style.overflow = '';
+    document.body.classList.add('preloader-finished');
+    return;
+  }
+
   const counterEl = document.getElementById('preloader-counter');
   const images = document.querySelectorAll('.preloader-img');
   
@@ -436,9 +443,8 @@ function initVelourPreloader() {
       setTimeout(() => {
         preloader.classList.add('is-hidden');
         document.body.style.overflow = ''; // Unlock scroll
-        
-        // Trigger hero animations if any rely on it
         document.body.classList.add('preloader-finished');
+        sessionStorage.setItem('velour_preloader_played', 'true');
       }, 300);
     }
     

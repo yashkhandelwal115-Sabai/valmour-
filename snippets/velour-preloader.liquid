@@ -22,4 +22,12 @@
     <div class="velour-preloader__counter" id="preloader-counter">000</div>
     
   </div>
+
+  <script>
+    if (sessionStorage.getItem('velour_preloader_played') === 'true') {
+      const preloader = document.getElementById('velour-preloader');
+      if (preloader) preloader.style.display = 'none';
+      document.body.classList.add('preloader-finished');
+    }
+  </script>
 {% endif %}
