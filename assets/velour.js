@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initMobileNav();
   initPredictiveSearch();
   initVariantSelectors();
+  initWishlist();
 });
 
 document.addEventListener('shopify:section:load', function(event) {
@@ -13,7 +14,57 @@ document.addEventListener('shopify:section:load', function(event) {
   initMobileNav();
   initPredictiveSearch();
   initVariantSelectors();
+  initWishlist();
 });
+
+window.initWishlist = function() {
+  var wishlist = JSON.parse(localStorage.getItem('velour_wishlist')) || [];
+  
+  document.querySelectorAll('.wishlist-btn').forEach(function(btn) {
+    var handle = btn.getAttribute('data-product-handle');
+    if (!handle) return;
+    
+    var outline = btn.querySelector('.wishlist-icon-outline');
+    var filled = btn.querySelector('.wishlist-icon-filled');
+    
+    if (wishlist.includes(handle)) {
+      if (outline) outline.style.display = 'none';
+      if (filled) filled.style.display = 'inline-block';
+    } else {
+      if (outline) outline.style.display = 'inline-block';
+      if (filled) filled.style.display = 'none';
+    }
+    
+    if (!btn.dataset.wishlistInitialized) {
+      btn.dataset.wishlistInitialized = 'true';
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        var currentWishlist = JSON.parse(localStorage.getItem('velour_wishlist')) || [];
+        var h = this.getAttribute('data-product-handle');
+        
+        var index = currentWishlist.indexOf(h);
+        if (index > -1) {
+          currentWishlist.splice(index, 1);
+          this.querySelector('.wishlist-icon-outline').style.display = 'inline-block';
+          this.querySelector('.wishlist-icon-filled').style.display = 'none';
+          
+          if (window.location.pathname.includes('wishlist')) {
+             var card = this.closest('.filterable-product') || this.closest('.product-card').parentElement;
+             if (card) card.style.display = 'none';
+          }
+        } else {
+          currentWishlist.push(h);
+          this.querySelector('.wishlist-icon-outline').style.display = 'none';
+          this.querySelector('.wishlist-icon-filled').style.display = 'inline-block';
+        }
+        
+        localStorage.setItem('velour_wishlist', JSON.stringify(currentWishlist));
+      });
+    }
+  });
+};
 
 function initStickyHeader() {
   var header = document.querySelector('header');

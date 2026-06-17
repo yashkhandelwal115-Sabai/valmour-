@@ -53,9 +53,7 @@
       {% endif %}
     </div>
 
-    <button class="product-card__wishlist" aria-label="Add to wishlist">
-      {% render 'icon-heart' %}
-    </button>
+
   </div>
 
   <div class="product-card__info-wrapper">
@@ -70,11 +68,7 @@
       </div>
     </a>
     
-    <div class="product-card__swatches-placeholder">
-      <span class="swatch-placeholder" style="background-color: #e5e0d8;"></span>
-      <span class="swatch-placeholder" style="background-color: #d1cfcb;"></span>
-      <span class="swatch-placeholder" style="background-color: #1a1a1a;"></span>
-    </div>
+
 
     <div class="product-card__action-bottom">
       {% if product == nil %}
@@ -132,23 +126,23 @@
           {% else %}
             <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
           {% endunless %}
-          <button type="submit" class="button button--outlined product-card__quick-add" style="width: 100%;">
-            {% render 'icon-cart' %} <span style="margin-left:8px;">Add to cart</span>
+          <button type="submit" class="button button--outlined product-card__quick-add" style="width: 100%;" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+            {% render 'icon-cart' %} <span style="margin-left:8px;">{% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}</span>
           </button>
         </form>
         
         <script>
           if (!window.ProductCardOptionsInitialized) {
             window.ProductCardOptionsInitialized = true;
-            document.addEventListener('change', function(e) {
-              if (e.target.matches('.product-card__option-select') || e.target.matches('.product-card__option-radio')) {
-                var form = e.target.closest('form');
+            
+            window.updateProductCard = function(form) {
                 var jsonEl = form.querySelector('.product-variants-json');
                 if (!jsonEl) return;
                 var variants = JSON.parse(jsonEl.textContent);
                 var idInput = form.querySelector('.product-card__variant-id');
                 var button = form.querySelector('.product-card__quick-add');
-                var buttonText = button.querySelector('span');
+                if (!button) return;
+                var buttonText = button.querySelector('span') || button;
 
                 // Get all selected options in order
                 var optionInputs = form.querySelectorAll('[name^="options["]');
@@ -203,8 +197,24 @@
                     }
                   });
                 });
+            };
+
+            document.addEventListener('change', function(e) {
+              if (e.target.matches('.product-card__option-select') || e.target.matches('.product-card__option-radio')) {
+                var form = e.target.closest('form');
+                if (form) window.updateProductCard(form);
               }
             });
+
+            window.updateAllProductCards = function() {
+              document.querySelectorAll('.product-card__form').forEach(window.updateProductCard);
+            };
+            
+            document.addEventListener('DOMContentLoaded', window.updateAllProductCards);
+            // Fallback if already loaded
+            if (document.readyState === 'interactive' || document.readyState === 'complete') {
+              setTimeout(window.updateAllProductCards, 100);
+            }
           }
         </script>
       {% else %}

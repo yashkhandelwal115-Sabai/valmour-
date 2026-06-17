@@ -17,7 +17,7 @@
       <div class="split-editorial__body">{{ section.settings.body }}</div>
     {% endif %}
     {% if section.settings.button_label != blank and section.settings.button_link != blank %}
-      <a href="{{ section.settings.button_link }}" class="button">{{ section.settings.button_label | escape }}</a>
+      <a href="{{ section.settings.button_link }}" target="_blank" rel="noopener noreferrer" class="button">{{ section.settings.button_label | escape }}</a>
     {% endif %}
   </div>
 </div>

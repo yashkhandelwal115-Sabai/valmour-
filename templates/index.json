@@ -31,7 +31,8 @@
         "eyebrow": "NEW SEASON",
         "heading": "MODERN MINIMALISM",
         "body": "<p>Clean silhouettes, neutral tones, and refined details define the season.</p>",
-        "button_label": "EXPLORE COLLECTION"
+        "button_label": "View Collection",
+        "button_link": "/collections/all?view=new-season"
       }
     },
     "trust-icons": {

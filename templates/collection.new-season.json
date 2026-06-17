@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "best_products": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "New Season",
+        "products_to_show": 6
+      }
+    }
+  },
+  "order": [
+    "best_products"
+  ]
+}
