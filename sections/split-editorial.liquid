@@ -1,14 +1,237 @@
+{{ 'cinematic-hero.css' | asset_url | stylesheet_tag }}
+<style>
+  /* --- Split Editorial Premium Custom Animations --- */
+  .split-editorial {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-surface);
+    margin: var(--spacing-section) 0;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1.6s var(--easing-luxury), transform 1.6s var(--easing-luxury);
+    will-change: transform, opacity;
+    --img-y: 0px;
+    --mouse-x: 0px;
+    --mouse-y: 0px;
+  }
+
+  .split-editorial.reveal-active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media screen and (min-width: 990px) {
+    .split-editorial {
+      flex-direction: row;
+      align-items: center;
+    }
+    .split-editorial--image-right {
+      flex-direction: row-reverse;
+    }
+    .split-editorial > * {
+      flex: 1;
+    }
+  }
+
+  .split-editorial__image-wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .split-editorial__image-parallax-wrapper {
+    width: 100%;
+    height: 100%;
+    transform: translate(var(--mouse-x, 0px), calc(var(--img-y, 0px) + var(--mouse-y, 0px)));
+    transition: transform 0.8s var(--easing-luxury);
+    will-change: transform;
+  }
+
+  .split-editorial__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    min-height: 600px;
+    display: block;
+    transform: scale(1.15);
+    transition: transform 4s var(--easing-luxury);
+    will-change: transform;
+  }
+
+  .split-editorial.reveal-active .split-editorial__image {
+    transform: scale(1.05); /* baseline scale to prevent edge gaps during parallax/mouse move */
+  }
+
+  /* Sunglasses Reflection */
+  .split-editorial__sunglasses-reflection-container {
+    position: absolute;
+    top: 41.5%;
+    left: 77.5%;
+    width: 14.5%;
+    height: 8.5%;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+    border-radius: 50% / 30%;
+    transform: rotate(-6deg);
+  }
+
+  .split-editorial__sunglasses-reflection {
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.7) 40%,
+      rgba(255, 255, 255, 0.9) 50%,
+      rgba(255, 255, 255, 0.7) 60%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: skewX(-25deg);
+    animation: sunglassesSweep 8s infinite ease-in-out;
+  }
+
+  @keyframes sunglassesSweep {
+    0%, 75% { left: -150%; }
+    85%, 100% { left: 150%; }
+  }
+
+  .split-editorial__content {
+    padding: 5rem 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Split Text Reveal styling */
+  .split-editorial__eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-muted);
+    margin-bottom: 1rem;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 1.2s var(--easing-luxury);
+    will-change: opacity;
+  }
+
+  .split-editorial__heading {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.35em;
+  }
+
+  .split-editorial__word-wrapper {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+
+  .split-editorial__word {
+    display: inline-block;
+    transform: translateY(110%);
+    opacity: 0;
+    transition: transform 1.2s var(--easing-luxury), opacity 1.2s var(--easing-luxury);
+    will-change: transform, opacity;
+  }
+
+  .split-editorial__body {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 1.2s var(--easing-luxury), transform 1.2s var(--easing-luxury);
+    will-change: transform, opacity;
+    margin-bottom: 2.5rem;
+  }
+
+  .split-editorial .button {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 1.2s var(--easing-luxury), transform 1.2s var(--easing-luxury);
+    will-change: transform, opacity;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-text) !important;
+    color: var(--color-surface) !important;
+    border: 1px solid var(--color-text) !important;
+    transition: color 0.6s var(--easing-luxury), border-color 0.6s var(--easing-luxury), transform 0.6s var(--easing-luxury) !important;
+  }
+
+  /* Reveal Timings */
+  .split-editorial.reveal-active .split-editorial__eyebrow {
+    opacity: 1;
+  }
+
+  .split-editorial.reveal-active .split-editorial__word--1 {
+    transform: translateY(0);
+    opacity: 1;
+    transition-delay: 0s;
+  }
+
+  .split-editorial.reveal-active .split-editorial__word--2 {
+    transform: translateY(0);
+    opacity: 1;
+    transition-delay: 0.3s;
+  }
+
+  .split-editorial.reveal-active .split-editorial__body {
+    transform: translateY(0);
+    opacity: 1;
+    transition-delay: 0.6s;
+  }
+
+  .split-editorial.reveal-active .button {
+    transform: translateY(0);
+    opacity: 1;
+    transition-delay: 0.9s;
+  }
+
+  /* Gold line button hover animation */
+  .split-editorial .button::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s var(--easing-luxury);
+    z-index: 2;
+  }
+
+  .split-editorial .button:hover::after {
+    transform: scaleX(1);
+  }
+
+  .split-editorial .button:hover {
+    background-color: transparent !important;
+    color: var(--color-text) !important;
+    border-color: var(--color-accent) !important;
+    transform: translateY(-2px) !important;
+  }
+</style>
+
 <div class="split-editorial split-editorial--{{ section.settings.layout }}">
   <div class="split-editorial__image-wrapper">
-    {% if section.settings.image != blank %}
-      {{ section.settings.image | image_url: width: 1500 | image_tag: loading: 'lazy', class: 'split-editorial__image' }}
-    {% else %}
-      <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1200&auto=format&fit=crop" class="split-editorial__image" width="1200" height="800" loading="lazy" alt="Minimalism">
-    {% endif %}
-    
-    <!-- Sunglasses Light Sweep Overlay -->
-    <div class="split-editorial__sunglasses-reflection-container">
-      <div class="split-editorial__sunglasses-reflection"></div>
+    <div class="split-editorial__image-parallax-wrapper">
+      {% if section.settings.image != blank %}
+        {{ section.settings.image | image_url: width: 1500 | image_tag: loading: 'lazy', class: 'split-editorial__image' }}
+      {% else %}
+        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1200&auto=format&fit=crop" class="split-editorial__image" width="1200" height="800" loading="lazy" alt="Minimalism">
+      {% endif %}
+      
+      <!-- Sunglasses Light Sweep Overlay -->
+      <div class="split-editorial__sunglasses-reflection-container">
+        <div class="split-editorial__sunglasses-reflection"></div>
+      </div>
     </div>
   </div>
   <div class="split-editorial__content">
@@ -19,7 +242,9 @@
       <h2 class="split-editorial__heading">
         {% assign heading_words = section.settings.heading | split: ' ' %}
         {% for word in heading_words %}
-          <span class="split-editorial__word split-editorial__word--{{ forloop.index }}">{{ word | escape }}</span>
+          <span class="split-editorial__word-wrapper">
+            <span class="split-editorial__word split-editorial__word--{{ forloop.index }}">{{ word | escape }}</span>
+          </span>
         {% endfor %}
       </h2>
     {% endif %}
@@ -33,65 +258,83 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.split-editorial').forEach((section) => {
-      // 1. Intersection Observer for Scroll Reveal
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            section.classList.add('reveal-active');
-            observer.unobserve(section);
-          }
+  (function() {
+    function initSplitEditorial() {
+      document.querySelectorAll('.split-editorial').forEach((section) => {
+        if (section.dataset.initialized === 'true') return;
+        section.dataset.initialized = 'true';
+
+        // 1. Intersection Observer for Scroll Reveal
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              section.classList.add('reveal-active');
+              observer.unobserve(section);
+            }
+          });
+        }, {
+          threshold: 0.05
         });
-      }, {
-        threshold: 0.1
-      });
-      observer.observe(section);
+        observer.observe(section);
 
-      // 2. Parallax Effect on Scroll
-      const img = section.querySelector('.split-editorial__image');
-      if (img) {
-        let ticking = false;
-        const handleParallax = () => {
+        // Fallback: trigger after delay if observer misses
+        setTimeout(() => {
+          section.classList.add('reveal-active');
+        }, 800);
+
+        // 2. Parallax Effect on Scroll
+        const parallaxWrapper = section.querySelector('.split-editorial__image-parallax-wrapper');
+        if (parallaxWrapper) {
+          let ticking = false;
+          const handleParallax = () => {
+            const rect = section.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+              const relativeY = rect.top;
+              const yTranslate = relativeY * 0.08;
+              section.style.setProperty('--img-y', `${yTranslate}px`);
+            }
+            ticking = false;
+          };
+
+          window.addEventListener('scroll', () => {
+            if (!ticking) {
+              window.requestAnimationFrame(handleParallax);
+              ticking = true;
+            }
+          }, { passive: true });
+
+          handleParallax();
+        }
+
+        // 3. Mouse Interaction (max 5px movement)
+        section.addEventListener('mousemove', (e) => {
           const rect = section.getBoundingClientRect();
-          if (rect.top < window.innerHeight && rect.bottom > 0) {
-            const relativeY = rect.top;
-            const yTranslate = relativeY * 0.08;
-            section.style.setProperty('--img-y', `${yTranslate}px`);
-          }
-          ticking = false;
-        };
+          const mouseX = e.clientX - rect.left;
+          const mouseY = e.clientY - rect.top;
+          
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
 
-        window.addEventListener('scroll', () => {
-          if (!ticking) {
-            window.requestAnimationFrame(handleParallax);
-            ticking = true;
-          }
-        }, { passive: true });
-      }
+          const moveX = ((mouseX - centerX) / centerX) * 5;
+          const moveY = ((mouseY - centerY) / centerY) * 5;
 
-      // 3. Mouse Interaction (max 5px movement)
-      section.addEventListener('mousemove', (e) => {
-        const rect = section.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
+          section.style.setProperty('--mouse-x', `${moveX}px`);
+          section.style.setProperty('--mouse-y', `${moveY}px`);
+        });
 
-        const moveX = ((mouseX - centerX) / centerX) * 5;
-        const moveY = ((mouseY - centerY) / centerY) * 5;
-
-        section.style.setProperty('--mouse-x', `${moveX}px`);
-        section.style.setProperty('--mouse-y', `${moveY}px`);
+        section.addEventListener('mouseleave', () => {
+          section.style.setProperty('--mouse-x', '0px');
+          section.style.setProperty('--mouse-y', '0px');
+        });
       });
+    }
 
-      section.addEventListener('mouseleave', () => {
-        section.style.setProperty('--mouse-x', '0px');
-        section.style.setProperty('--mouse-y', '0px');
-      });
-    });
-  });
+    if (document.readyState !== 'loading') {
+      initSplitEditorial();
+    } else {
+      document.addEventListener('DOMContentLoaded', initSplitEditorial);
+    }
+  })();
 </script>
 
 {% schema %}
