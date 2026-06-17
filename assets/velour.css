@@ -1648,3 +1648,13 @@ html.has-active-transition .luxury-transition-overlay__content {
   transform: translateY(0) !important;
   transition: none !important;
 }
+
+/* Offset fixed header on all inner pages to prevent content overlap */
+body:not(.template-index) #MainContent {
+  padding-top: 90px;
+}
+@media (max-width: 768px) {
+  body:not(.template-index) #MainContent {
+    padding-top: 80px;
+  }
+}
