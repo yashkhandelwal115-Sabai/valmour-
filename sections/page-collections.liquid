@@ -1,11 +1,26 @@
-<div style="background-color: #FAF8F5; padding: 4rem 0;">
+<div class="collections-section">
   <div class="page-width" style="max-width: 1200px; margin: 0 auto; padding: 0 5%;">
     <div style="text-align: center; margin-bottom: 4rem;">
-      <h1 style="font-family: var(--font-heading-family); font-size: 3rem; margin-bottom: 1.5rem; text-transform: uppercase;">All Collections</h1>
+      <h1 class="collections-title">All Collections</h1>
       <p style="color: #666; line-height: 1.8; max-width: 600px; margin: 0 auto;">Explore our curated selection of timeless fashion categories designed for everyday elegance.</p>
     </div>
 
     {% style %}
+      .collections-section {
+        background-color: #FAF8F5;
+        padding: 2.5rem 0;
+      }
+      @media (min-width: 768px) {
+        .collections-section {
+          padding: 4rem 0;
+        }
+      }
+      .collections-title {
+        font-family: var(--font-heading-family);
+        font-size: clamp(2rem, 5vw, 3rem);
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+      }
       .collections-grid {
         display: grid;
         grid-template-columns: 1fr;
@@ -16,7 +31,7 @@
       }
       .collection-card {
         position: relative;
-        height: 400px;
+        height: 280px;
         border-radius: 8px;
         overflow: hidden;
         display: flex;
@@ -24,6 +39,11 @@
         justify-content: center;
         text-decoration: none;
         transition: transform 0.3s ease;
+      }
+      @media (min-width: 768px) {
+        .collection-card {
+          height: 400px;
+        }
       }
       .collection-card:hover {
         transform: translateY(-5px);

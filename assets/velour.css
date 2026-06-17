@@ -371,6 +371,11 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--c
   }
   .header__menu-link {
     font-size: 1.25rem;
+    color: var(--color-text) !important;
+  }
+  .header__menu-link:hover,
+  .header__menu-link[aria-current="page"] {
+    color: var(--color-accent) !important;
   }
   .header__hamburger { display: block; } 
   .header__search { display: none; } 
