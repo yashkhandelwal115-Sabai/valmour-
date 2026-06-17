@@ -71,7 +71,7 @@
     </script>
   </head>
 
-  <body class="template-{{ template.name }}">
+  <body class="template-{{ template.name }}{% if template.suffix %} template-suffix-{{ template.suffix }}{% endif %}">
     <div class="luxury-transition-overlay">
       <div class="luxury-transition-overlay__bg"></div>
       <div class="luxury-transition-overlay__circle"></div>

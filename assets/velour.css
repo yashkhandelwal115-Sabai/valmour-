@@ -1649,12 +1649,14 @@ html.has-active-transition .luxury-transition-overlay__content {
   transition: none !important;
 }
 
-/* Offset fixed header on all inner pages to prevent content overlap */
-body:not(.template-index) #MainContent {
+/* Offset fixed header on all inner pages and alternate index templates to prevent content overlap */
+body:not(.template-index) #MainContent,
+body[class*="template-suffix-"] #MainContent {
   padding-top: 90px;
 }
 @media (max-width: 768px) {
-  body:not(.template-index) #MainContent {
+  body:not(.template-index) #MainContent,
+  body[class*="template-suffix-"] #MainContent {
     padding-top: 80px;
   }
 }
