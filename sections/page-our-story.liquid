@@ -1,24 +1,73 @@
-<div style="background-color: #FAF8F5; padding: 4rem 0;">
+<div style="background-color: #FAF8F5; padding: 6rem 0;">
   <div class="page-width" style="max-width: 1200px; margin: 0 auto; padding: 0 5%;">
-  <div style="display: grid; grid-template-columns: 1fr; gap: 4rem; align-items: center;">
     {% style %}
+      .story-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 5rem;
+        align-items: center;
+      }
       @media (min-width: 768px) {
-        .story-grid { grid-template-columns: 1fr 1fr !important; }
+        .story-grid {
+          grid-template-columns: 1.1fr 0.9fr !important;
+        }
+      }
+      .story-title {
+        font-family: var(--font-heading-family);
+        font-size: 3.5rem;
+        font-weight: 300;
+        letter-spacing: 0.05em;
+        line-height: 1.1;
+        margin-bottom: 2rem;
+        text-transform: uppercase;
+        color: #1a1a1a;
+      }
+      .story-tagline {
+        font-family: var(--font-body-family);
+        font-size: 1.25rem;
+        line-height: 1.6;
+        color: #555;
+        margin-bottom: 2rem;
+        font-weight: 400;
+        border-left: 2px solid #D4AF37; /* Gold accent line */
+        padding-left: 1.5rem;
+      }
+      .story-paragraph {
+        color: #666;
+        line-height: 1.8;
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+      }
+      .story-image-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 4px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+      }
+      .story-image {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 1.5s ease;
+      }
+      .story-image-container:hover .story-image {
+        transform: scale(1.03);
       }
     {% endstyle %}
-    <div class="story-grid" style="display: grid; grid-template-columns: 1fr; gap: 4rem; align-items: center;">
+    
+    <div class="story-grid">
       <div>
-        <h1 style="font-family: var(--font-heading-family); font-size: 3rem; margin-bottom: 1.5rem; text-transform: uppercase;">Our Story</h1>
-        <p style="color: #666; line-height: 1.8; margin-bottom: 1.5rem;">Velour was born out of a desire to create clothing that transcends fleeting trends. Founded in 2024, our mission has always been to craft timeless pieces using the finest materials available.</p>
-        <p style="color: #666; line-height: 1.8; margin-bottom: 1.5rem;">We believe in quality over quantity. Every stitch, every seam, and every fabric choice is meticulously considered to ensure our garments not only look beautiful but last a lifetime.</p>
-        <p style="color: #666; line-height: 1.8;">Our design philosophy is rooted in minimalism, offering versatile staples that effortlessly elevate your everyday wardrobe.</p>
+        <h1 class="story-title">About Velour</h1>
+        <p class="story-tagline">Crafting modern, minimal silhouettes designed to elevate the everyday life of the contemporary individual.</p>
+        <p class="story-paragraph">Velour was founded in 2024 with a singular vision: to create a curated wardrobe that transcends the cycle of fast fashion. Our designs are rooted in architectural lines, quiet luxury, and an unwavering commitment to fine materials.</p>
+        <p class="story-paragraph">We believe that true elegance lies in the details. Every thread, every seam, and every fabric selection is meticulously chosen in our studio. We source our textiles responsibly, working only with ethical mills to ensure each piece not only looks beautiful but stands the test of time.</p>
+        <p class="story-paragraph">Our aesthetic is quiet yet profound. By focusing on neutral tones, clean cuts, and premium comfort, Velour is designed to become a natural extension of your personal narrative.</p>
       </div>
-      <div>
-        <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1000&auto=format&fit=crop" alt="Fashion design process" style="width: 100%; height: auto; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+      <div class="story-image-container">
+        <img class="story-image" src="{{ 'about-us-editorial.png' | asset_url }}" alt="Velour Luxury Editorial">
       </div>
     </div>
   </div>
-</div>
 </div>
 
 {% schema %}
