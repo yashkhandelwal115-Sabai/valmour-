@@ -1,23 +1,72 @@
-<ul class="social-icons" role="list">
-  {%- if settings.social_facebook_link != blank -%}
-    <li><a href="{{ settings.social_facebook_link }}" class="social-icons__link" aria-describedby="a11y-external-message">Facebook</a></li>
-  {%- endif -%}
-  {%- if settings.social_instagram_link != blank -%}
-    <li><a href="{{ settings.social_instagram_link }}" class="social-icons__link" aria-describedby="a11y-external-message">Instagram</a></li>
-  {%- endif -%}
-  {%- if settings.social_youtube_link != blank -%}
-    <li><a href="{{ settings.social_youtube_link }}" class="social-icons__link" aria-describedby="a11y-external-message">YouTube</a></li>
-  {%- endif -%}
-  {%- if settings.social_tiktok_link != blank -%}
-    <li><a href="{{ settings.social_tiktok_link }}" class="social-icons__link" aria-describedby="a11y-external-message">TikTok</a></li>
-  {%- endif -%}
-  {%- if settings.social_twitter_link != blank -%}
-    <li><a href="{{ settings.social_twitter_link }}" class="social-icons__link" aria-describedby="a11y-external-message">Twitter</a></li>
-  {%- endif -%}
-  {%- if settings.social_pinterest_link != blank -%}
-    <li><a href="{{ settings.social_pinterest_link }}" class="social-icons__link" aria-describedby="a11y-external-message">Pinterest</a></li>
-  {%- endif -%}
-  {%- if settings.social_linkedin_link != blank -%}
-    <li><a href="{{ settings.social_linkedin_link }}" class="social-icons__link" aria-describedby="a11y-external-message">LinkedIn</a></li>
-  {%- endif -%}
+{%- assign instagram_url = settings.social_instagram_link | default: 'https://instagram.com' -%}
+{%- assign facebook_url = settings.social_facebook_link | default: 'https://facebook.com' -%}
+{%- assign telegram_url = settings.social_telegram_link | default: 'https://t.me' -%}
+
+<style>
+  .footer__social-list {
+    display: flex;
+    gap: 0.8rem;
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    align-items: center;
+  }
+  .footer__social-item {
+    margin: 0;
+    padding: 0;
+  }
+  .footer__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #262626;
+    color: #FFFFFF;
+    transition: background-color 0.4s cubic-bezier(0.19, 1, 0.22, 1), 
+                color 0.4s cubic-bezier(0.19, 1, 0.22, 1), 
+                transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    text-decoration: none;
+  }
+  .footer__social-link:hover {
+    background-color: #C9A96E; /* Gold Accent */
+    color: #FFFFFF;
+    transform: translateY(-3px);
+  }
+  .footer__social-link svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+</style>
+
+<ul class="footer__social-list" role="list">
+  <li class="footer__social-item">
+    <a href="{{ instagram_url }}" target="_blank" rel="noopener noreferrer" class="footer__social-link" aria-label="Instagram">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+      </svg>
+    </a>
+  </li>
+  <li class="footer__social-item">
+    <a href="{{ facebook_url }}" target="_blank" rel="noopener noreferrer" class="footer__social-link" aria-label="Facebook">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+      </svg>
+    </a>
+  </li>
+  <li class="footer__social-item">
+    <a href="{{ telegram_url }}" target="_blank" rel="noopener noreferrer" class="footer__social-link" aria-label="Telegram">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4Z"></path>
+      </svg>
+    </a>
+  </li>
 </ul>

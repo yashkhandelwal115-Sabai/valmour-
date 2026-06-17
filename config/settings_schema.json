@@ -145,6 +145,11 @@
         "type": "text",
         "id": "social_linkedin_link",
         "label": "LinkedIn"
+      },
+      {
+        "type": "text",
+        "id": "social_telegram_link",
+        "label": "Telegram"
       }
     ]
   },
