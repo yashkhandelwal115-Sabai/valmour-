@@ -105,7 +105,7 @@
                             {% assign is_available = true %}
                           {% endif %}
                         {% endfor %}
-                        <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %} {% unless is_available %}disabled{% endunless %}>
+                        <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
                           {{ value }}{% unless is_available %} - Out of stock{% endunless %}
                         </option>
                       {% endfor %}
@@ -120,7 +120,7 @@
                             {% assign is_available = true %}
                           {% endif %}
                         {% endfor %}
-                        <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %} {% unless is_available %}disabled{% endunless %}>
+                        <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
                           {{ value }}{% unless is_available %} - Out of stock{% endunless %}
                         </option>
                       {% endfor %}
@@ -199,10 +199,8 @@
                     });
                     
                     if (testVariant && testVariant.available) {
-                      optEl.disabled = false;
                       optEl.innerText = value;
                     } else {
-                      optEl.disabled = true;
                       optEl.innerText = value + ' - Out of stock';
                     }
                   });
