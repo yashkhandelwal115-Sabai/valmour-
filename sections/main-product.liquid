@@ -47,8 +47,11 @@
               </div>
             {% when 'buy_buttons' %}
               <div class="product-page__form-wrapper" {{ block.shopify_attributes }}>
-                <form method="post" action="{{ routes.cart_add_url }}" id="product-form-{{ section.id }}" class="product-form">
+                {%- assign product_form_id = 'product-form-' | append: section.id -%}
+                {%- form 'product', product, id: product_form_id, class: 'product-form' -%}
                   <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="VariantId-{{ section.id }}">
+                  {{ form | payment_terms }}
+                  
                   <script type="application/json" id="ProductVariants-{{ section.id }}">
                     {{ product.variants | json }}
                   </script>
@@ -62,27 +65,26 @@
                             {% assign downcase_name = option.name | downcase %}
                             {% if downcase_name == 'size' %}
                               <div class="size-swatches-container">
-                                {% assign all_sizes = "XS,S,M,L,XL" | split: "," %}
-                                {% for f_size in all_sizes %}
+                                {% for value in option.values %}
                                   {% assign is_available = false %}
                                   {% for variant in product.variants %}
                                     {% assign opt_idx = option.position | minus: 1 %}
-                                    {% if variant.options[opt_idx] == f_size %}
+                                    {% if variant.options[opt_idx] == value %}
                                       {% if variant.available %}
                                         {% assign is_available = true %}
                                       {% endif %}
                                     {% endif %}
                                   {% endfor %}
-                                  <div class="size-swatch-item {% unless is_available %}is-sold-out{% endunless %}" data-option-position="{{ option.position | minus: 1 }}" data-value="{{ f_size | escape }}">
+                                  <div class="size-swatch-item {% unless is_available %}is-sold-out{% endunless %}" data-option-position="{{ option.position | minus: 1 }}" data-value="{{ value | escape }}">
                                     <input type="radio" 
                                            id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
                                            name="options[{{ option.name | escape }}]"
-                                           value="{{ f_size | escape }}"
-                                           {% if option.selected_value == f_size and is_available %}checked{% endif %}
+                                           value="{{ value | escape }}"
+                                           {% if option.selected_value == value and is_available %}checked{% endif %}
                                            class="visually-hidden"
                                            {% unless is_available %}disabled{% endunless %}>
                                     <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="size-swatch-label">
-                                      {{ f_size }}
+                                      {{ value }}
                                     </label>
                                     <span class="size-swatch-status {% if is_available %}in-stock{% else %}out-of-stock{% endif %}">
                                       {% if is_available %}In stock{% else %}Out of stock{% endif %}
@@ -113,7 +115,7 @@
                     <label for="Quantity-{{ section.id }}" class="visually-hidden">Quantity</label>
                     <div class="quantity-input">
                       <button class="quantity-input__btn quantity-input__btn--minus" type="button" aria-label="Decrease">&minus;</button>
-                      <input class="quantity-input__field" type="number" name="quantity" id="Quantity-{{ section.id }}" min="1" value="1" form="product-form-{{ section.id }}">
+                      <input class="quantity-input__field" type="number" name="quantity" id="Quantity-{{ section.id }}" min="1" value="1" form="{{ product_form_id }}">
                       <button class="quantity-input__btn quantity-input__btn--plus" type="button" aria-label="Increase">&plus;</button>
                     </div>
                   </div>
@@ -121,10 +123,10 @@
                   <div class="product-form__buttons">
 
                     <button
-                      type="submit"
-                      name="add"
-                      class="button button--full-width product-form__submit"
-                      {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+                       type="submit"
+                       name="add"
+                       class="button button--full-width product-form__submit"
+                       {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
                     >
                       <span>
                         {% if product.selected_or_first_available_variant.available %}
@@ -138,7 +140,7 @@
                       {{ form | payment_button }}
                     {% endif %}
                   </div>
-                </form>
+                {%- endform -%}
               </div>
 
               {%- if product.selected_or_first_available_variant.store_availabilities.size > 0 -%}

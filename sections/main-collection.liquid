@@ -208,7 +208,35 @@
           }
         }
       </style>
-      
+      <!-- Active Filters -->
+      <div class="active-filters" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; align-items: center;">
+        {%- for filter in collection.filters -%}
+          {%- for value in filter.active_values -%}
+            <a class="active-filters__clear-filter" href="{{ value.url_to_remove }}" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #E5E0D8; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.75rem; text-decoration: none; color: var(--color-text); border: 1px solid #dcd6cd; transition: all 0.2s ease;">
+              {{ filter.label }}: {{ value.label }}
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-top: 1px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </a>
+          {%- endfor -%}
+          {%- if filter.type == "price_range" -%}
+            {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+              <a class="active-filters__clear-filter" href="{{ filter.url_to_remove }}" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #E5E0D8; padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.75rem; text-decoration: none; color: var(--color-text); border: 1px solid #dcd6cd; transition: all 0.2s ease;">
+                {%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- else -%}0{%- endif -%}-{%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- else -%}{{ filter.range_max | money }}{%- endif -%}
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-top: 1px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </a>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- assign has_active_filters = false -%}
+        {%- for filter in collection.filters -%}
+          {%- if filter.active_values.size > 0 or filter.min_value.value != nil or filter.max_value.value != nil -%}
+            {%- assign has_active_filters = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if has_active_filters -%}
+          <a href="{{ collection.url }}?sort_by={{ collection.sort_by }}" class="active-filters__clear-all" style="font-size: 0.75rem; color: var(--color-accent); text-decoration: underline; font-weight: 600; margin-left: 0.5rem;">Clear all</a>
+        {%- endif -%}
+      </div>
+
       {% paginate collection.products by 36 %}
         <div id="product-grid-container" class="grid-4-special reveal-stagger-container">
           {% if collection.products.size > 0 %}

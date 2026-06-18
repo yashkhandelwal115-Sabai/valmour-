@@ -1,4 +1,5 @@
-<div class="featured-collection">
+<div style="background-color: #F5F1EA; width: 100%; padding: var(--spacing-section) 0;">
+  <div class="featured-collection" style="padding: 0 5%; max-width: 1600px; margin: 0 auto;">
   <div class="featured-collection__header">
     {% if section.settings.heading != blank %}
       <h2 class="featured-collection__heading">{{ section.settings.heading | escape }}</h2>
@@ -28,6 +29,7 @@
       {% endfor %}
     {% endif %}
   </div>
+</div>
 </div>
 
 {% schema %}

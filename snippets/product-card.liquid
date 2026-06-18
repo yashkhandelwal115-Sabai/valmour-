@@ -87,7 +87,7 @@
           {% render 'icon-cart' %} <span style="margin-left:8px;">Add to cart</span>
         </a>
       {% elsif product.available != false %}
-        <form method="post" action="{{ routes.cart_add_url }}" class="product-card__form">
+        {%- form 'product', product, class: 'product-card__form' -%}
           <input type="hidden" name="return_to" value="/cart" />
           {% unless product.has_only_default_variant %}
             <div class="product-card__options" style="margin-bottom: 15px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 15px; align-items: start; text-align: left;">
@@ -97,17 +97,16 @@
                   {% assign downcase_name = option.name | downcase %}
                   {% if downcase_name == 'size' %}
                     <select class="product-card__option-select" name="options[{{ option.name | escape }}]" data-option-position="{{ option.position | minus: 1 }}" aria-label="{{ option.name }}" style="width: 100%; padding: 8px; border: 1px solid var(--color-border, #e0e0e0); background: var(--color-background, #fff); color: var(--color-text, #333); font-size: 12px; font-family: inherit; text-transform: capitalize;">
-                      {% assign all_sizes = "XS,S,M,L,XL" | split: "," %}
-                      {% for f_size in all_sizes %}
+                      {% for value in option.values %}
                         {% assign is_available = false %}
                         {% for variant in product.variants %}
                           {% assign opt_idx = option.position | minus: 1 %}
-                          {% if variant.options[opt_idx] == f_size and variant.available %}
+                          {% if variant.options[opt_idx] == value and variant.available %}
                             {% assign is_available = true %}
                           {% endif %}
                         {% endfor %}
-                        <option value="{{ f_size | escape }}" {% if option.selected_value == f_size %}selected="selected"{% endif %} {% unless is_available %}disabled{% endunless %}>
-                          {{ f_size }}{% unless is_available %} - Out of stock{% endunless %}
+                        <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %} {% unless is_available %}disabled{% endunless %}>
+                          {{ value }}{% unless is_available %} - Out of stock{% endunless %}
                         </option>
                       {% endfor %}
                     </select>
@@ -140,7 +139,7 @@
           <button type="submit" class="button button--outlined product-card__quick-add" style="width: 100%;" {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
             {% render 'icon-cart' %} <span style="margin-left:8px;">{% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}</span>
           </button>
-        </form>
+        {%- endform -%}
         
         <script>
           if (!window.ProductCardOptionsInitialized) {

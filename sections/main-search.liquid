@@ -17,7 +17,7 @@
 </style>
 
 <div class="search-page" style="padding: 4rem 5%; max-width: 1440px; margin: 0 auto; min-height: 60vh;">
-  <div style="text-align: center; margin-bottom: 4rem;">
+  <div style="text-align: center; margin-bottom: 3rem;">
     <h1 style="font-family: var(--font-heading-family); font-size: clamp(2rem, 4vw, 3rem); text-transform: uppercase; margin-bottom: 1rem;">
       Search Results
     </h1>
@@ -27,6 +27,19 @@
       </p>
     {% endif %}
   </div>
+
+  <div style="max-width: 600px; margin: 0 auto 4rem;">
+    <form action="{{ routes.search_url }}" method="get" role="search" style="display: flex; gap: 0.5rem; justify-content: center;">
+      <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search our store..." style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #e5e0d8; font-size: 0.9rem; font-family: var(--font-body-family); border-radius: 0; background: #fff;">
+      <button type="submit" class="button" style="background-color: var(--color-accent); color: #fff; border: none; padding: 0.75rem 1.5rem; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; font-size: 0.8rem; font-family: inherit;">Search</button>
+    </form>
+  </div>
+
+  {% unless search.performed %}
+    <div style="text-align: center; padding: 4rem 0;">
+      <p style="color: #666; font-size: 1.1rem; margin-bottom: 2rem;">Perform a search to find products, pages, and blog posts.</p>
+    </div>
+  {% endunless %}
 
   {% if search.performed %}
     {% paginate search.results by 24 %}

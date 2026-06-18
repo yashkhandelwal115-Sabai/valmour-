@@ -1,15 +1,220 @@
-<div class="brand-marquee" style="--marquee-speed: {{ section.settings.speed }}s">
-  {% assign brands = "VELORA, AURELLE, NOVÉRA, ÉLORIA, VALENCE, LUNÉRA" | split: ", " %}
+<style>
+  .luxury-brand-marquee-section {
+    background-color: #0A0A0A;
+    padding: 3rem 0;
+    position: relative;
+    overflow: hidden;
+  }
   
-  <div class="brand-marquee__track">
-    {% for i in (1..4) %}
-      <div class="brand-marquee__list">
-        {% for brand in brands %}
-          <div class="brand-marquee__item">{{ brand }}</div>
-        {% endfor %}
-      </div>
-    {% endfor %}
+  /* Soft vignette edges to fade out the marquee on the sides */
+  .luxury-brand-marquee-section::before,
+  .luxury-brand-marquee-section::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 15%;
+    z-index: 5;
+    pointer-events: none;
+  }
+  .luxury-brand-marquee-section::before {
+    left: 0;
+    background: linear-gradient(to right, #0A0A0A, transparent);
+  }
+  .luxury-brand-marquee-section::after {
+    right: 0;
+    background: linear-gradient(to left, #0A0A0A, transparent);
+  }
+
+  /* Heading Wrapper */
+  .luxury-brand-marquee__heading-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    padding: 0 5%;
+  }
+  
+  .luxury-brand-marquee__heading-line {
+    height: 1px;
+    flex-grow: 1;
+    max-width: 150px;
+    position: relative;
+  }
+  .luxury-brand-marquee__heading-line--left {
+    background: linear-gradient(to left, #D4AF37, transparent);
+  }
+  .luxury-brand-marquee__heading-line--right {
+    background: linear-gradient(to right, #D4AF37, transparent);
+  }
+  .luxury-brand-marquee__heading-line::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 4px;
+    height: 4px;
+    background-color: #D4AF37;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 0 8px #D4AF37;
+  }
+  .luxury-brand-marquee__heading-line--left::after {
+    right: 0;
+  }
+  .luxury-brand-marquee__heading-line--right::after {
+    left: 0;
+  }
+
+  .luxury-brand-marquee__title {
+    font-family: var(--font-heading-family), serif;
+    font-size: 0.8rem;
+    color: #D4AF37;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
+    text-shadow: 0 0 4px rgba(212, 175, 55, 0.2);
+  }
+
+  /* Divider styles */
+  .luxury-divider {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(to right, transparent, rgba(212, 175, 55, 0.3) 15%, #D4AF37 50%, rgba(212, 175, 55, 0.3) 85%, transparent);
+    position: relative;
+  }
+  .luxury-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: 3px;
+    background: radial-gradient(circle, rgba(212,175,55,0.6) 0%, transparent 70%);
+    filter: blur(1px);
+    pointer-events: none;
+  }
+
+  /* Marquee Track */
+  .luxury-brand-marquee__container {
+    padding: 1.5rem 0;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+  }
+  
+  .luxury-brand-marquee__track {
+    display: flex;
+    width: max-content;
+    animation: luxuryMarqueeScroll var(--marquee-speed, 15s) linear infinite;
+    will-change: transform;
+  }
+  
+  .luxury-brand-marquee__track:hover {
+    animation-play-state: paused;
+  }
+
+  .luxury-brand-marquee__list {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .luxury-brand-marquee__item {
+    font-family: var(--font-heading-family), serif;
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    color: #D4AF37;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding: 0 2rem;
+    display: inline-block;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.4s ease, color 0.4s ease;
+    cursor: pointer;
+    transform-origin: center;
+  }
+  
+  .luxury-brand-marquee__item:hover {
+    color: #FFE89C;
+    transform: scale(1.05);
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.7);
+  }
+
+  .luxury-brand-marquee__separator {
+    color: #D4AF37;
+    font-size: 1rem;
+    opacity: 0.7;
+    padding: 0 1.5rem;
+    user-select: none;
+  }
+
+  @keyframes luxuryMarqueeScroll {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  /* Responsive styling */
+  @media (max-width: 768px) {
+    .luxury-brand-marquee__title {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+    }
+    .luxury-brand-marquee__heading-wrapper {
+      gap: 0.8rem;
+    }
+    .luxury-brand-marquee__heading-line {
+      max-width: 60px;
+    }
+    .luxury-brand-marquee__item {
+      font-size: 1.1rem;
+      padding: 0 1rem;
+    }
+    .luxury-brand-marquee__separator {
+      padding: 0 0.5rem;
+      font-size: 0.8rem;
+    }
+    .luxury-brand-marquee-section {
+      padding: 2rem 0;
+    }
+  }
+</style>
+
+<div class="luxury-brand-marquee-section">
+  
+  <!-- Heading with lines and dots -->
+  <div class="luxury-brand-marquee__heading-wrapper">
+    <div class="luxury-brand-marquee__heading-line luxury-brand-marquee__heading-line--left"></div>
+    <h2 class="luxury-brand-marquee__title">FEATURED LUXURY BRANDS</h2>
+    <div class="luxury-brand-marquee__heading-line luxury-brand-marquee__heading-line--right"></div>
   </div>
+
+  <!-- Gold Divider Above -->
+  <div class="luxury-divider"></div>
+
+  <!-- Marquee container and track -->
+  <div class="luxury-brand-marquee__container" style="--marquee-speed: {{ section.settings.speed }}s">
+    {% assign brands = "PRADA, GUCCI, DIOR, BURBERRY, VERSACE, BALENCIAGA, ARMANI, TOM FORD, ZARA" | split: ", " %}
+    <div class="luxury-brand-marquee__track">
+      {% for i in (1..2) %}
+        <div class="luxury-brand-marquee__list">
+          {% for brand in brands %}
+            <span class="luxury-brand-marquee__item">{{ brand }}</span>
+            <span class="luxury-brand-marquee__separator">•</span>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Gold Divider Below -->
+  <div class="luxury-divider"></div>
 </div>
 
 {% schema %}
@@ -19,10 +224,10 @@
     {
       "type": "range",
       "id": "speed",
-      "min": 10,
-      "max": 60,
-      "step": 5,
-      "default": 30,
+      "min": 5,
+      "max": 40,
+      "step": 1,
+      "default": 15,
       "unit": "s",
       "label": "Animation Speed"
     }

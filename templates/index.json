@@ -45,18 +45,11 @@
       },
       "block_order": ["shipping", "returns", "payments", "quality"]
     },
-    "logo-list": {
-      "type": "logo-list",
+    "brand-marquee": {
+      "type": "brand-marquee",
       "settings": {
-        "heading": "TRUSTED BY THE WORLD'S BEST"
-      },
-      "blocks": {
-        "zara": { "type": "logo" },
-        "gucci": { "type": "logo" },
-        "prada": { "type": "logo" },
-        "burberry": { "type": "logo" }
-      },
-      "block_order": ["zara", "gucci", "prada", "burberry"]
+        "speed": 15
+      }
     },
     "instagram": {
       "type": "instagram-feed",
@@ -72,14 +65,23 @@
         "img6": { "type": "image" }
       },
       "block_order": ["img1", "img2", "img3", "img4", "img5", "img6"]
+    },
+    "editorial-quote": {
+      "type": "editorial-quote",
+      "settings": {
+        "quote_text_1": "Elegance is not a trend.",
+        "quote_text_2": "It is a signature.",
+        "author": "VELOUR"
+      }
     }
   },
   "order": [
     "hero",
     "collections",
-    "logo-list",
+    "brand-marquee",
     "best-sellers",
     "editorial",
+    "editorial-quote",
     "trust-icons",
     "instagram"
   ]
