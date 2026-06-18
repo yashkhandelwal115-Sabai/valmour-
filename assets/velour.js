@@ -89,49 +89,50 @@ function initStickyHeader() {
 
 function initSearchDrawer() {
   var searchToggle = document.querySelector('[data-search-drawer-toggle]');
-  var searchDrawer = document.getElementById('SearchDrawer');
-  var overlay = document.querySelector('.search-drawer-overlay');
-  var closeBtn = document.querySelector('.search-drawer__close');
-  var input = searchDrawer ? searchDrawer.querySelector('input[type="search"]') : null;
+  var searchInline = document.getElementById('HeaderSearchInline');
+  var closeBtn = document.querySelector('.header__search-close');
+  var input = searchInline ? searchInline.querySelector('.header__search-input') : null;
   
-  if (!searchDrawer) return;
+  if (!searchInline) return;
 
-  function openDrawer() {
-    searchDrawer.classList.add('is-open');
-    if (overlay) overlay.classList.add('is-active');
-    document.body.style.overflow = 'hidden';
+  function openSearch() {
+    searchInline.classList.add('is-active');
     setTimeout(function() {
       if (input) input.focus();
     }, 120);
   }
 
-  function closeDrawer() {
-    searchDrawer.classList.remove('is-open');
-    if (overlay) overlay.classList.remove('is-active');
-    document.body.style.overflow = '';
+  function closeSearch() {
+    searchInline.classList.remove('is-active');
+    if (input) {
+      input.value = '';
+      // Reset predictive search if active
+      var pred = searchInline.querySelector('predictive-search');
+      if (pred) pred.removeAttribute('open');
+    }
   }
 
   if (searchToggle) {
     searchToggle.addEventListener('click', function(e) {
       e.preventDefault();
-      openDrawer();
+      if (searchInline.classList.contains('is-active')) {
+        closeSearch();
+      } else {
+        openSearch();
+      }
     });
   }
 
   if (closeBtn) {
     closeBtn.addEventListener('click', function(e) {
       e.preventDefault();
-      closeDrawer();
+      closeSearch();
     });
   }
 
-  if (overlay) {
-    overlay.addEventListener('click', closeDrawer);
-  }
-
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && searchDrawer.classList.contains('is-open')) {
-      closeDrawer();
+    if (e.key === 'Escape' && searchInline.classList.contains('is-active')) {
+      closeSearch();
     }
   });
 }
