@@ -1,7 +1,7 @@
 {
-  "current": "Default",
+  "current": "Velour",
   "presets": {
-    "Default": {
+    "Velour": {
       "color_bg": "#FAF8F5",
       "color_surface": "#FFFFFF",
       "color_text": "#1A1A1A",
