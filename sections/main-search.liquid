@@ -28,11 +28,23 @@
     {% endif %}
   </div>
 
-  <div style="max-width: 600px; margin: 0 auto 4rem;">
-    <form action="{{ routes.search_url }}" method="get" role="search" style="display: flex; gap: 0.5rem; justify-content: center;">
-      <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search our store..." style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #e5e0d8; font-size: 0.9rem; font-family: var(--font-body-family); border-radius: 0; background: #fff;">
-      <button type="submit" class="button" style="background-color: var(--color-accent); color: #fff; border: none; padding: 0.75rem 1.5rem; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; font-size: 0.8rem; font-family: inherit;">Search</button>
-    </form>
+  <div style="max-width: 600px; margin: 0 auto 4rem; position: relative;">
+    <predictive-search>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="header__search" style="display: flex; gap: 0.5rem; justify-content: center;">
+        <input type="hidden" name="type" value="product">
+        <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search our store..." style="width: 100%; padding: 0.75rem 1rem; border: 1px solid #e5e0d8; font-size: 0.9rem; font-family: var(--font-body-family); border-radius: 0; background: #fff;"
+          role="combobox"
+          aria-expanded="false"
+          aria-owns="predictive-search-results-list"
+          aria-controls="predictive-search-results-list"
+          aria-haspopup="listbox"
+          aria-autocomplete="list"
+          autocomplete="off"
+        >
+        <button type="submit" class="button" style="background-color: var(--color-accent); color: #fff; border: none; padding: 0.75rem 1.5rem; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; font-size: 0.8rem; font-family: inherit;">Search</button>
+      </form>
+      <div class="predictive-search" tabindex="-1" data-predictive-search style="text-align: left; margin-top: 0.5rem; width: 100%; left: 0;"></div>
+    </predictive-search>
   </div>
 
   {% unless search.performed %}
@@ -55,7 +67,7 @@
 
         <form id="SearchFiltersForm" class="filter-form" action="{{ routes.search_url }}">
           <input type="hidden" name="q" value="{{ search.terms | escape }}">
-          <input type="hidden" name="type" value="product,article,page">
+          <input type="hidden" name="type" value="product">
           {%- for filter in search.filters -%}
             <div class="filter-group" style="margin-bottom: 2.5rem; border-bottom: 1px solid #f0f0f0; padding-bottom: 2rem;">
               <h4 style="font-family: var(--font-heading-family); font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">

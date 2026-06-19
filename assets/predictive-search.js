@@ -145,7 +145,7 @@ class PredictiveSearch extends HTMLElement {
       return;
     }
 
-    fetch(`/search/suggest?q=${encodeURIComponent(searchTerm)}&resources[type]=product,page,article&section_id=predictive-search`)
+    fetch(`/search/suggest?q=${encodeURIComponent(searchTerm)}&resources[type]=product&section_id=predictive-search`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(response.status);
