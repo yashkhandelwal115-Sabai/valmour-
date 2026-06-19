@@ -465,6 +465,14 @@ class PremiumPageTransition {
         this.startTransition(e.clientX, e.clientY, anchor.href);
       });
     });
+
+    // Handle browser back button (bfcache)
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted && this.overlay) {
+        this.overlay.classList.remove('is-active');
+        if (this.circle) this.circle.style.transform = 'scale(0)';
+      }
+    });
   }
 
   startTransition(x, y, targetUrl) {

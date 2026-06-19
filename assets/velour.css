@@ -741,7 +741,7 @@ input[type="radio"]:checked + .size-swatch-label {
 .quantity-input__field { width: 60px; text-align: center; border: none; padding: 1rem 0; font-size: 1rem; background: transparent; appearance: textfield; -moz-appearance: textfield; border-bottom: none; }
 .quantity-input__field::-webkit-outer-spin-button, .quantity-input__field::-webkit-inner-spin-button { appearance: none; -webkit-appearance: none; margin: 0; }
 .product-form__actions { display: flex; flex-direction: column; gap: 1rem; }
-.product-form__submit { padding: 1.5rem; font-size: 0.9rem; }
+.product-form__submit { padding: 0 !important; height: 60px !important; font-size: 0.9rem; }
 .product-form__buttons {
   display: flex;
   flex-direction: column;
@@ -750,8 +750,10 @@ input[type="radio"]:checked + .size-swatch-label {
 }
 
 /* Shopify Dynamic Checkout */
-.shopify-payment-button__button { border-radius: 0 !important; font-family: inherit !important; text-transform: uppercase !important; letter-spacing: 0.1em !important; }
-.shopify-payment-button__button--unbranded { background-color: var(--color-accent) !important; padding: 1.5rem !important; }
+.shopify-payment-button { height: 60px !important; }
+.shopify-payment-button__button { border-radius: 0 !important; font-family: inherit !important; text-transform: uppercase !important; letter-spacing: 0.1em !important; padding: 0 !important; height: 60px !important; min-height: 60px !important; line-height: 60px !important; font-size: 0.9rem !important; display: flex !important; justify-content: center !important; align-items: center !important; box-sizing: border-box !important; }
+.shopify-payment-button__button--unbranded { background-color: var(--color-accent) !important; color: #ffffff !important; transition: background-color 0.4s ease !important; }
+.shopify-payment-button__button--unbranded:hover { background-color: var(--color-text) !important; }
 
 /* --- Split Editorial --- */
 .split-editorial {
