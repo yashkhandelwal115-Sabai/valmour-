@@ -141,16 +141,26 @@
     gap: 1rem;
     background: #fff;
   }
-  .quantity-selector a {
+  .quantity-selector button {
     color: inherit;
-    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0 0.5rem;
   }
   .quantity-selector input {
     font-size: 0.9rem;
-    width: 30px;
+    width: 40px;
     text-align: center;
     border: none;
     background: transparent;
+    -moz-appearance: textfield;
+  }
+  .quantity-selector input::-webkit-outer-spin-button,
+  .quantity-selector input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 
   /* Mobile Styles */
@@ -302,9 +312,9 @@
                 
                 <div class="cart-item__quantity">
                   <div class="quantity-selector">
-                    <a href="/cart/change?line={{ forloop.index }}&amp;quantity={{ item.quantity | minus: 1 }}">-</a>
+                    <button type="button" class="qty-minus">-</button>
                     <input type="number" name="updates[]" value="{{ item.quantity }}" min="0">
-                    <a href="/cart/change?line={{ forloop.index }}&amp;quantity={{ item.quantity | plus: 1 }}">+</a>
+                    <button type="button" class="qty-plus">+</button>
                   </div>
                 </div>
                 
@@ -357,9 +367,43 @@
             document.addEventListener('DOMContentLoaded', function() {
               var cartForm = document.getElementById('cart');
               var qtyInputs = cartForm.querySelectorAll('.quantity-selector input');
+              var timeout;
+
+              function submitForm() {
+                cartForm.style.opacity = '0.5';
+                cartForm.style.pointerEvents = 'none';
+                cartForm.submit();
+              }
+
+              function debounceSubmit() {
+                clearTimeout(timeout);
+                timeout = setTimeout(submitForm, 600);
+              }
+
               qtyInputs.forEach(function(input) {
-                input.addEventListener('change', function() {
-                  cartForm.submit();
+                input.addEventListener('change', debounceSubmit);
+              });
+
+              var minusBtns = cartForm.querySelectorAll('.qty-minus');
+              var plusBtns = cartForm.querySelectorAll('.qty-plus');
+
+              minusBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                  var input = this.nextElementSibling;
+                  var val = parseInt(input.value) || 0;
+                  if (val > 0) {
+                    input.value = val - 1;
+                    debounceSubmit();
+                  }
+                });
+              });
+
+              plusBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                  var input = this.previousElementSibling;
+                  var val = parseInt(input.value) || 0;
+                  input.value = val + 1;
+                  debounceSubmit();
                 });
               });
             });

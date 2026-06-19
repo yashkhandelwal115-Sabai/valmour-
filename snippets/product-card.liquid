@@ -97,18 +97,20 @@
                   {% assign downcase_name = option.name | downcase %}
                   {% if downcase_name == 'size' %}
                     <select class="product-card__option-select" name="options[{{ option.name | escape }}]" data-option-position="{{ option.position | minus: 1 }}" aria-label="{{ option.name }}" style="width: 100%; padding: 8px; border: 1px solid var(--color-border, #e0e0e0); background: var(--color-background, #fff); color: var(--color-text, #333); font-size: 12px; font-family: inherit; text-transform: capitalize;">
-                      {% for value in option.values %}
-                        {% assign is_available = false %}
-                        {% for variant in product.variants %}
-                          {% assign opt_idx = option.position | minus: 1 %}
-                          {% if variant.options[opt_idx] == value and variant.available %}
-                            {% assign is_available = true %}
-                          {% endif %}
-                        {% endfor %}
-                        <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
-                          {{ value }}{% unless is_available %} - Out of stock{% endunless %}
+                      {%- assign standard_sizes = 'XS,S,M,L,XL,XXL' | split: ',' -%}
+                      {%- assign first_available_set = false -%}
+                      {%- for std_size in standard_sizes -%}
+                        {%- assign sz_available = false -%}
+                        {%- for variant in product.variants -%}
+                          {%- assign opt_idx = option.position | minus: 1 -%}
+                          {%- if variant.options[opt_idx] == std_size and variant.available -%}
+                            {%- assign sz_available = true -%}
+                          {%- endif -%}
+                        {%- endfor -%}
+                        <option value="{{ std_size }}" {% if sz_available and first_available_set == false %}selected="selected"{% assign first_available_set = true %}{% endif %} {% unless sz_available %}disabled style="color: #bbb; text-decoration: line-through;"{% endunless %}>
+                          {{ std_size }}{% unless sz_available %} (sold out){% endunless %}
                         </option>
-                      {% endfor %}
+                      {%- endfor -%}
                     </select>
                   {% else %}
                     <select class="product-card__option-select" name="options[{{ option.name | escape }}]" data-option-position="{{ option.position | minus: 1 }}" aria-label="{{ option.name }}" style="width: 100%; padding: 8px; border: 1px solid var(--color-border, #e0e0e0); background: var(--color-background, #fff); color: var(--color-text, #333); font-size: 12px; font-family: inherit; text-transform: capitalize;">
@@ -120,8 +122,8 @@
                             {% assign is_available = true %}
                           {% endif %}
                         {% endfor %}
-                        <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
-                          {{ value }}{% unless is_available %} - Out of stock{% endunless %}
+                        <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %} {% unless is_available %}disabled style="color: #bbb; text-decoration: line-through;"{% endunless %}>
+                          {{ value }}{% unless is_available %} (sold out){% endunless %}
                         </option>
                       {% endfor %}
                     </select>

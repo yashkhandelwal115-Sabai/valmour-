@@ -1288,17 +1288,7 @@ input[type="radio"]:checked + .size-swatch-label {
   0% { transform: translate3d(0, 0, 0); }
   100% { transform: translate3d(-100%, 0, 0); }
 }
-/* --- Premium Scroll Reveal --- */
-.reveal-item {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-}
-.reveal-item--visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* Scroll reveal handled in velour.css lines 109-124 */
 /* --- Sticky Header Premium --- */
 .header--sticky {
   position: fixed;

@@ -51,7 +51,7 @@
       {% form 'customer', id: 'FooterNewsletterForm', style: 'display: flex; flex-direction: column; gap: 0.5rem;' %}
         <input type="hidden" name="contact[tags]" value="newsletter">
         <div style="display: flex;">
-          <input type="email" name="contact[email]" placeholder="Enter your email" required style="background: transparent; border: 1px solid #333; color: #FFF; padding: 0.75rem 1rem; width: 100%; font-size: 0.75rem;">
+          <input type="email" name="contact[email]" placeholder="Email" required style="background: transparent; border: 1px solid #333; color: #FFF; padding: 0.75rem 1rem; width: 100%; min-width: 0; font-size: 0.75rem;">
           <button type="submit" style="background: var(--color-accent); color: #FFF; border: none; padding: 0 1.5rem; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; white-space: nowrap;">Subscribe</button>
         </div>
         {%- if form.posted_successfully? -%}

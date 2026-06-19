@@ -138,13 +138,19 @@ function initSearchDrawer() {
 }
 
 function initScrollReveal() {
+  // Make all reveal-stagger-child items visible immediately — no hiding on mobile
+  document.querySelectorAll('.reveal-stagger-child').forEach(function(item) {
+    item.classList.add('reveal-item--visible');
+  });
+
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.querySelectorAll('.reveal-item, .reveal-stagger-child').forEach(function(item) {
+    document.querySelectorAll('.reveal-item').forEach(function(item) {
       item.classList.add('reveal-item--visible');
     });
     return;
   }
 
+  // Only animate non-product-grid reveal-items with intersection observer
   var revealObserver = new IntersectionObserver(function(entries, observer) {
     entries.forEach(function(entry) {
       if (entry.isIntersecting) {
@@ -154,35 +160,15 @@ function initScrollReveal() {
     });
   }, {
     root: null,
-    rootMargin: '0px 0px -50px 0px',
-    threshold: 0.1
+    rootMargin: '50px 0px 50px 0px',
+    threshold: 0
   });
 
   document.querySelectorAll('.reveal-item').forEach(function(el) {
-    revealObserver.observe(el);
-  });
-
-  var staggerObserver = new IntersectionObserver(function(entries, observer) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        var container = entry.target;
-        var children = container.querySelectorAll('.reveal-stagger-child');
-        children.forEach(function(child, index) {
-          setTimeout(function() {
-            child.classList.add('reveal-item--visible');
-          }, index * 120); // Luxury editorial stagger timing
-        });
-        observer.unobserve(container);
-      }
-    });
-  }, {
-    root: null,
-    rootMargin: '0px 0px -50px 0px',
-    threshold: 0.1
-  });
-
-  document.querySelectorAll('.reveal-stagger-container').forEach(function(container) {
-    staggerObserver.observe(container);
+    // Skip stagger children - they are handled above
+    if (!el.classList.contains('reveal-stagger-child')) {
+      revealObserver.observe(el);
+    }
   });
 }
 
@@ -338,40 +324,6 @@ document.addEventListener('shopify:section:load', function(event) {
     initMagneticButtons();
   }
 });
-function initScrollReveal() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px 0px -10% 0px',
-    threshold: 0.1
-  };
-
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('reveal-item--visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, observerOptions);
-
-  const sections = document.querySelectorAll('#MainContent > .shopify-section > div, #MainContent > .shopify-section > section');
-  let delayIndex = 0;
-  sections.forEach((section) => {
-    if (!section.classList.contains('cinematic-hero') && !section.classList.contains('reveal-item')) {
-      section.classList.add('reveal-item');
-      // Stagger initial view sections
-      const rect = section.getBoundingClientRect();
-      if (rect.top < window.innerHeight) {
-          section.style.transitionDelay = (delayIndex * 0.15) + 's';
-          delayIndex++;
-      }
-    }
-    observer.observe(section);
-  });
-}
-
 document.addEventListener('DOMContentLoaded', initScrollReveal);
 document.addEventListener('shopify:section:load', initScrollReveal);
 function initStickyHeader() {

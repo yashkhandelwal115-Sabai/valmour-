@@ -15,7 +15,7 @@
     {% elsif section.settings.image != blank %}
       {{ section.settings.image | image_url: width: 1600 | image_tag: style: 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;' }}
     {% else %}
-      <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=100&w=1600&auto=format&fit=crop" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 20%;" alt="Collection Hero">
+      <img src="{{ 'western_fashion_hero.png' | asset_url }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 20%;" alt="Collection Hero">
     {% endif %}
   </div>
 </div>

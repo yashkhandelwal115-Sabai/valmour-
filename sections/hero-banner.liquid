@@ -1,3 +1,4 @@
+<link rel="preload" href="{{ 'cinematic-hero.css' | asset_url }}" as="style">
 {{ 'cinematic-hero.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'cinematic-hero.js' | asset_url }}" defer="defer"></script>
 
@@ -7,7 +8,16 @@
   {% if section.settings.image != blank %}
     {{ section.settings.image | image_url: width: 3840 | image_tag: class: 'cinematic-hero__bg', loading: 'eager', fetchpriority: 'high' }}
   {% else %}
-    <img src="{{ 'high_fashion_hero.png' | asset_url }}" class="cinematic-hero__bg" alt="Luxury Fashion">
+    <img 
+      src="{{ 'high_fashion_hero.png' | asset_url }}" 
+      class="cinematic-hero__bg" 
+      alt="VELOUR – Luxury Fashion"
+      width="1920" 
+      height="1080"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    >
   {% endif %}
 
   <!-- Vanilla JS Particle Engine Canvas -->

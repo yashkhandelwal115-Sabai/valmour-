@@ -7,6 +7,8 @@
 
 {% if page_description %}
   <meta name="description" content="{{ page_description | escape }}">
+{% else %}
+  <meta name="description" content="{{ shop.name }} – {{ shop.description | default: 'Timeless pieces. Modern silhouettes. Crafted with intention.' | escape }}">
 {% endif %}
 
 <!-- Open Graph -->
